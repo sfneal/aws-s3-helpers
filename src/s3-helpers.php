@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
+use Illuminate\Http\Response;
 use Sfneal\Helpers\Aws\S3\S3;
 
 
@@ -22,7 +23,7 @@ function fileURL(string $path, bool $temp = true) {
  * @param string $s3_key
  * @return bool
  */
-function s3_exists(string $s3_key) {
+function s3_exists(string $s3_key): bool {
     return (new S3($s3_key))->exists();
 }
 
@@ -45,10 +46,10 @@ function s3_upload($s3_key, $file_path, $acl=null) {
  *
  * @param $file_url
  * @param string|null $file_name
- * @return \Illuminate\Http\Response
+ * @return Response
  * @throws FileNotFoundException
  */
-function s3_download($file_url, string $file_name = null) {
+function s3_download($file_url, string $file_name = null): Response {
     return (new S3($file_url))->download($file_name);
 }
 
@@ -84,7 +85,7 @@ function s3_upload_raw($s3_key, string $file_contents, string $acl = null) {
  * @param $s3_key
  * @return array
  */
-function s3_list($s3_key)
+function s3_list($s3_key): array
 {
     return (new S3($s3_key))->list();
 }
