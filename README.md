@@ -16,9 +16,25 @@ composer require sfneal/aws-s3-helpers
 ```
 
 ## Usage
+Add 's3' disk to the 'disks' array in config/filesystems.php with your own AWS credentials.
 
 ``` php
-// Usage description here
+'s3' => [
+    'driver' => 's3',
+    'key' => env('S3_KEY'),
+    'secret' => env('S3_SECRET'),
+    'region' => env('S3_REGION'),
+    'bucket' => env('S3_BUCKET'),
+],
+```
+
+Add S3 keys to your .env files.
+
+```php
+S3_KEY=********************
+S3_SECRET=****************************************
+S3_REGION=*********
+S3_BUCKET=******************
 ```
 
 ### Testing
