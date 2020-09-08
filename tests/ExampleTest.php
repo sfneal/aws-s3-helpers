@@ -1,6 +1,6 @@
 <?php
 
-namespace Sfneal\PhpPackageBoilerplate\Tests;
+namespace Sfneal\Helpers\Aws\S3\Tests;
 
 use PHPUnit\Framework\TestCase;
 

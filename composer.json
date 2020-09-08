@@ -1,11 +1,11 @@
 {
-    "name": "sfneal/php-package-boilerplate",
-    "description": "Boilerplate for PHP package repo's",
+    "name": "sfneal/aws-s3-helpers",
+    "description": "Abstraction layers for interacting with AWS S3 storage",
     "keywords": [
         "sfneal",
-        "php-package-boilerplate"
+        "aws-s3-helpers"
     ],
-    "homepage": "https://github.com/sfneal/php-package-boilerplate",
+    "homepage": "https://github.com/sfneal/aws-s3-helpers",
     "license": "MIT",
     "type": "library",
     "authors": [
@@ -23,12 +23,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Sfneal\\PhpPackageBoilerplate\\": "src"
+            "Sfneal\\Helpers\\Aws\\S3\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Sfneal\\PhpPackageBoilerplate\\Tests\\": "tests"
+            "Sfneal\\Helpers\\Aws\\S3\\Tests\\": "tests"
         }
     },
     "scripts": {
