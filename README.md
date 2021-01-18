@@ -1,7 +1,8 @@
 # AWS S3 Helpers
 
+[![Packagist PHP support](https://img.shields.io/packagist/php-v/sfneal/aws-s3-helpers)](https://packagist.org/packages/sfneal/aws-s3-helpers)
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/sfneal/aws-s3-helpers.svg?style=flat-square)](https://packagist.org/packages/sfneal/aws-s3-helpers)
-[![Build Status](https://img.shields.io/travis/sfneal/aws-s3-helpers/master.svg?style=flat-square)](https://travis-ci.org/sfneal/aws-s3-helpers)
+[![Build Status](https://travis-ci.com/sfneal/aws-s3-helpers.svg?branch=master&style=flat-square)](https://travis-ci.com/sfneal/aws-s3-helpers)
 [![Quality Score](https://img.shields.io/scrutinizer/g/sfneal/aws-s3-helpers.svg?style=flat-square)](https://scrutinizer-ci.com/g/sfneal/aws-s3-helpers)
 [![Total Downloads](https://img.shields.io/packagist/dt/sfneal/aws-s3-helpers.svg?style=flat-square)](https://packagist.org/packages/sfneal/aws-s3-helpers)
 
