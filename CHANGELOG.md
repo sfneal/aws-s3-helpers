@@ -27,3 +27,7 @@ All notable changes to `aws-s3-helpers` will be documented in this file
 - optimize `S3` methods return type hinting
 - add $expiration param to `url()` method for specifying a temp url TTL
 - add `S3::urlTemp()` method for retrieving temp urls
+
+
+## 0.5.0 - 2021-06-23
+- make `StorageS3` class that allows for static construction of an S3 object
