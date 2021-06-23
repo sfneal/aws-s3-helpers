@@ -2,6 +2,7 @@
 
 namespace Sfneal\Helpers\Aws\S3;
 
+use DateTimeInterface;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
@@ -27,12 +28,13 @@ class S3
      * Return either an S3 file url or a local file url.
      *
      * @param bool $temp
+     * @param DateTimeInterface|null $expiration
      * @return string
      */
-    public function url(bool $temp = true): string
+    public function url(bool $temp = true, DateTimeInterface $expiration = null): string
     {
         if ($temp) {
-            return Storage::disk('s3')->temporaryUrl($this->s3_key, now()->addMinutes(60));
+            return Storage::disk('s3')->temporaryUrl($this->s3_key, $expiration ?? now()->addMinutes(60));
         } else {
             return Storage::disk('s3')->url($this->s3_key);
         }
