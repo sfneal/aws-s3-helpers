@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Sfneal\Helpers\Aws\S3;
-
 
 class StorageS3
 {
