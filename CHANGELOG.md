@@ -34,4 +34,4 @@ All notable changes to `aws-s3-helpers` will be documented in this file
 
 
 ## 0.5.1 - 2021-06-23
-- fix issue with `Storage::disk()` method not being declared as static
+- fix issues with `Storage::disk()` method not being declared as static
