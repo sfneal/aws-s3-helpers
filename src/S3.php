@@ -25,7 +25,7 @@ class S3
     }
 
     /**
-     * Return either an S3 file url or a local file url.
+     * Return either an S3 file url.
      *
      * @param bool $temp
      * @param DateTimeInterface|null $expiration
@@ -38,6 +38,17 @@ class S3
         } else {
             return Storage::disk('s3')->url($this->s3_key);
         }
+    }
+
+    /**
+     * Return either a temporary S3 file url.
+     *
+     * @param DateTimeInterface|null $expiration
+     * @return string
+     */
+    public function urlTemp(DateTimeInterface $expiration = null): string
+    {
+        return $this->url(true, $expiration);
     }
 
     /**
