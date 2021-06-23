@@ -27,9 +27,9 @@ class S3
      * Return either an S3 file url or a local file url.
      *
      * @param bool $temp
-     * @return mixed
+     * @return string
      */
-    public function url(bool $temp = true)
+    public function url(bool $temp = true): string
     {
         if ($temp) {
             return Storage::disk('s3')->temporaryUrl($this->s3_key, now()->addMinutes(60));
@@ -43,7 +43,7 @@ class S3
      *
      * @return bool
      */
-    public function exists()
+    public function exists(): bool
     {
         return Storage::disk('s3')->exists($this->s3_key);
     }
@@ -51,11 +51,11 @@ class S3
     /**
      * Upload a file to an S3 bucket.
      *
-     * @param $file_path
+     * @param string $file_path
      * @param string|null $acl
-     * @return mixed
+     * @return string
      */
-    public function upload(string $file_path, string $acl = null)
+    public function upload(string $file_path, string $acl = null): string
     {
         if (is_null($acl)) {
             Storage::disk('s3')->put($this->s3_key, fopen($file_path, 'r+'));
@@ -71,9 +71,9 @@ class S3
      *
      * @param string $file_contents
      * @param string|null $acl
-     * @return mixed
+     * @return string
      */
-    public function upload_raw(string $file_contents, string $acl = null)
+    public function upload_raw(string $file_contents, string $acl = null): string
     {
         if (is_null($acl)) {
             Storage::disk('s3')->put($this->s3_key, $file_contents);
@@ -89,9 +89,9 @@ class S3
      *
      * @param string|null $file_name
      * @return \Illuminate\Http\Response
-     * @throws FileNotFoundException
+     * @throws FileNotFoundException|\League\Flysystem\FileNotFoundException
      */
-    public function download(string $file_name = null)
+    public function download(string $file_name = null): \Illuminate\Http\Response
     {
         if (is_null($file_name)) {
             $file_name = basename($this->s3_key);
@@ -126,7 +126,7 @@ class S3
      *
      * @return array
      */
-    public function list()
+    public function list(): array
     {
         $storage = Storage::disk('s3');
         $client = $storage->getAdapter()->getClient();
