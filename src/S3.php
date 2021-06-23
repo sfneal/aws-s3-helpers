@@ -15,6 +15,11 @@ class S3
     private $s3_key;
 
     /**
+     * @var string
+     */
+    private $disk;
+
+    /**
      * S3 constructor.
      *
      * @param string $s3_key
@@ -22,6 +27,20 @@ class S3
     public function __construct(string $s3_key)
     {
         $this->s3_key = $s3_key;
+        $this->disk = config('filesystem.cloud', 's3');
+    }
+
+    /**
+     * Set the filesystem disk.
+     *
+     * @param string $disk
+     * @return $this
+     */
+    public function setDisk(string $disk): self
+    {
+        $this->disk = $disk;
+
+        return $this;
     }
 
     /**
@@ -34,9 +53,9 @@ class S3
     public function url(bool $temp = true, DateTimeInterface $expiration = null): string
     {
         if ($temp) {
-            return Storage::disk('s3')->temporaryUrl($this->s3_key, $expiration ?? now()->addMinutes(60));
+            return Storage::disk($this->disk)->temporaryUrl($this->s3_key, $expiration ?? now()->addMinutes(60));
         } else {
-            return Storage::disk('s3')->url($this->s3_key);
+            return Storage::disk($this->disk)->url($this->s3_key);
         }
     }
 
@@ -58,7 +77,7 @@ class S3
      */
     public function exists(): bool
     {
-        return Storage::disk('s3')->exists($this->s3_key);
+        return Storage::disk($this->disk)->exists($this->s3_key);
     }
 
     /**
@@ -71,9 +90,9 @@ class S3
     public function upload(string $file_path, string $acl = null): string
     {
         if (is_null($acl)) {
-            Storage::disk('s3')->put($this->s3_key, fopen($file_path, 'r+'));
+            Storage::disk($this->disk)->put($this->s3_key, fopen($file_path, 'r+'));
         } else {
-            Storage::disk('s3')->put($this->s3_key, fopen($file_path, 'r+'), $acl);
+            Storage::disk($this->disk)->put($this->s3_key, fopen($file_path, 'r+'), $acl);
         }
 
         return $this->url();
@@ -89,9 +108,9 @@ class S3
     public function upload_raw(string $file_contents, string $acl = null): string
     {
         if (is_null($acl)) {
-            Storage::disk('s3')->put($this->s3_key, $file_contents);
+            Storage::disk($this->disk)->put($this->s3_key, $file_contents);
         } else {
-            Storage::disk('s3')->put($this->s3_key, $file_contents, $acl);
+            Storage::disk($this->disk)->put($this->s3_key, $file_contents, $acl);
         }
 
         return $this->url();
@@ -110,8 +129,8 @@ class S3
             $file_name = basename($this->s3_key);
         }
 
-        $mime = Storage::disk('s3')->getMimetype($this->s3_key);
-        $size = Storage::disk('s3')->getSize($this->s3_key);
+        $mime = Storage::disk($this->disk)->getMimetype($this->s3_key);
+        $size = Storage::disk($this->disk)->getSize($this->s3_key);
 
         $response = [
             'Content-Type' => $mime,
@@ -121,7 +140,7 @@ class S3
             'Content-Transfer-Encoding' => 'binary',
         ];
 
-        return Response::make(Storage::disk('s3')->get($this->s3_key), 200, $response);
+        return Response::make(Storage::disk($this->disk)->get($this->s3_key), 200, $response);
     }
 
     /**
@@ -131,7 +150,7 @@ class S3
      */
     public function delete(): bool
     {
-        return Storage::disk('s3')->delete($this->s3_key);
+        return Storage::disk($this->disk)->delete($this->s3_key);
     }
 
     /**
@@ -141,7 +160,7 @@ class S3
      */
     public function list(): array
     {
-        $storage = Storage::disk('s3');
+        $storage = Storage::disk($this->disk);
         $client = $storage->getAdapter()->getClient();
         $command = $client->getCommand('ListObjects');
         $command['Bucket'] = $storage->getAdapter()->getBucket();
