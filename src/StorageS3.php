@@ -22,7 +22,7 @@ class StorageS3
      * @param string $key
      * @return S3
      */
-    public function disk(string $disk, string $key): S3
+    public static function disk(string $disk, string $key): S3
     {
         return self::key($key)->setDisk($disk);
     }

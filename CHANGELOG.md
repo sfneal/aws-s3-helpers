@@ -31,3 +31,7 @@ All notable changes to `aws-s3-helpers` will be documented in this file
 
 ## 0.5.0 - 2021-06-23
 - start making `StorageS3` class that allows for static construction of an S3 object
+
+
+## 0.5.1 - 2021-06-23
+- fix issue with `Storage::disk()` method not being declared as static
