@@ -20,3 +20,10 @@ All notable changes to `aws-s3-helpers` will be documented in this file
 
 ## 0.4.0 - 2020-12-11
 - add support for php8
+
+
+## 0.4.1 - 2021-06-23
+- optimize Travis CI config & add code coverage upload support
+- optimize `S3` methods return type hinting
+- add $expiration param to `url()` method for specifying a temp url TTL
+- add `S3::urlTemp()` method for retrieving temp urls
