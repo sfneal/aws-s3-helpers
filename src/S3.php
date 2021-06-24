@@ -205,14 +205,14 @@ class S3
     public function autocompletePath(): self
     {
         // Extract the known $base of the path & the $wildcard
-        list($base, $wildcard) = [dirname($this->s3_key), basename($this->s3_key)];
+        [$base, $wildcard] = [dirname($this->s3_key), basename($this->s3_key)];
 
         // Get all of the folders in the base directory
         $folders = $this->storageDisk()->directories($base);
 
         // Filter folders to find the wildcard path
         $folders = array_filter($folders, function ($value) use ($base, $wildcard) {
-            return str_starts_with($value, $base . DIRECTORY_SEPARATOR . $wildcard);
+            return str_starts_with($value, $base.DIRECTORY_SEPARATOR.$wildcard);
         });
 
         // return the resolved path
