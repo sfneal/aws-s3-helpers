@@ -233,8 +233,9 @@ class S3
         // Create array of all files
         $allFiles = $this->storageDisk()->allFiles($this->s3_key);
 
+        // Apply filtering closure
         if (isset($closure)) {
-            return $closure(array_values($allFiles));
+            return array_filter(array_values($allFiles), $closure);
         }
 
         return $allFiles;
