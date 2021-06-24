@@ -40,3 +40,7 @@ All notable changes to `aws-s3-helpers` will be documented in this file
 ## 0.6.0 - 2021-06-24
 - add `autocompletePath()` method to `S3` for resolving partially complete directory paths with wildcard endings
 - add `allFiles()` method to `S3` for retrieving all files in a directory and then applying a filter
+
+
+## 0.6.1 - 2021-06-24
+- cut default autoloading of 's3-helpers' helper function, now they must be manually autoloaded to avoid function name conflicts

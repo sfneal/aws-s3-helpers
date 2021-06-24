@@ -26,15 +26,15 @@
     "autoload": {
         "psr-4": {
             "Sfneal\\Helpers\\Aws\\S3\\": "src"
-        },
-        "files": [
-            "src/s3-helpers.php"
-        ]
+        }
     },
     "autoload-dev": {
         "psr-4": {
             "Sfneal\\Helpers\\Aws\\S3\\Tests\\": "tests"
-        }
+        },
+        "files": [
+            "src/s3-helpers.php"
+        ]
     },
     "scripts": {
         "test": "vendor/bin/phpunit",
