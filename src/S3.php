@@ -205,7 +205,8 @@ class S3
     public function autocompletePath(): self
     {
         // Extract the known $base of the path & the $wildcard
-        [$base, $wildcard] = [dirname($this->s3_key), basename($this->s3_key)];
+        $base = dirname($this->s3_key);
+        $wildcard = basename($this->s3_key);
 
         // Get all of the folders in the base directory
         $folders = $this->storageDisk()->directories($base);
