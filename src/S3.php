@@ -2,7 +2,6 @@
 
 namespace Sfneal\Helpers\Aws\S3;
 
-use Closure;
 use DateTimeInterface;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Contracts\Filesystem\Filesystem;
@@ -225,18 +224,11 @@ class S3
     /**
      * Retrieve an array of all files in a directory with an optional filtering closure.
      *
-     * @param Closure|null $closure
      * @return array
      */
-    public function allFiles(Closure $closure = null): array
+    public function allFiles(): array
     {
         // Create array of all files
-        $allFiles = $this->storageDisk()->allFiles($this->s3_key);
-
-        if (isset($closure)) {
-            return $closure($allFiles);
-        }
-
-        return $allFiles;
+        return $this->storageDisk()->allFiles($this->s3_key);
     }
 }
