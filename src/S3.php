@@ -234,7 +234,7 @@ class S3
         $allFiles = $this->storageDisk()->allFiles($this->s3_key);
 
         if (isset($closure)) {
-            return $closure($allFiles);
+            return $closure(array_values($allFiles));
         }
 
         return $allFiles;
