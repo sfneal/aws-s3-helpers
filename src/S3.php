@@ -5,6 +5,7 @@ namespace Sfneal\Helpers\Aws\S3;
 use Closure;
 use DateTimeInterface;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
+use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
 
@@ -32,6 +33,16 @@ class S3
     }
 
     /**
+     * Retrieve a Filesystem instance for the specified disk.
+     *
+     * @return Filesystem
+     */
+    private function storageDisk(): Filesystem
+    {
+        return Storage::disk($this->disk);
+    }
+
+    /**
      * Set the filesystem disk.
      *
      * @param string $disk
@@ -54,9 +65,9 @@ class S3
     public function url(bool $temp = true, DateTimeInterface $expiration = null): string
     {
         if ($temp) {
-            return Storage::disk($this->disk)->temporaryUrl($this->s3_key, $expiration ?? now()->addMinutes(60));
+            return $this->storageDisk()->temporaryUrl($this->s3_key, $expiration ?? now()->addMinutes(60));
         } else {
-            return Storage::disk($this->disk)->url($this->s3_key);
+            return $this->storageDisk()->url($this->s3_key);
         }
     }
 
@@ -78,7 +89,7 @@ class S3
      */
     public function exists(): bool
     {
-        return Storage::disk($this->disk)->exists($this->s3_key);
+        return $this->storageDisk()->exists($this->s3_key);
     }
 
     /**
@@ -91,9 +102,9 @@ class S3
     public function upload(string $file_path, string $acl = null): string
     {
         if (is_null($acl)) {
-            Storage::disk($this->disk)->put($this->s3_key, fopen($file_path, 'r+'));
+            $this->storageDisk()->put($this->s3_key, fopen($file_path, 'r+'));
         } else {
-            Storage::disk($this->disk)->put($this->s3_key, fopen($file_path, 'r+'), $acl);
+            $this->storageDisk()->put($this->s3_key, fopen($file_path, 'r+'), $acl);
         }
 
         return $this->url();
@@ -109,9 +120,9 @@ class S3
     public function upload_raw(string $file_contents, string $acl = null): string
     {
         if (is_null($acl)) {
-            Storage::disk($this->disk)->put($this->s3_key, $file_contents);
+            $this->storageDisk()->put($this->s3_key, $file_contents);
         } else {
-            Storage::disk($this->disk)->put($this->s3_key, $file_contents, $acl);
+            $this->storageDisk()->put($this->s3_key, $file_contents, $acl);
         }
 
         return $this->url();
@@ -130,8 +141,8 @@ class S3
             $file_name = basename($this->s3_key);
         }
 
-        $mime = Storage::disk($this->disk)->getMimetype($this->s3_key);
-        $size = Storage::disk($this->disk)->getSize($this->s3_key);
+        $mime = $this->storageDisk()->getMimetype($this->s3_key);
+        $size = $this->storageDisk()->getSize($this->s3_key);
 
         $response = [
             'Content-Type' => $mime,
@@ -141,7 +152,7 @@ class S3
             'Content-Transfer-Encoding' => 'binary',
         ];
 
-        return Response::make(Storage::disk($this->disk)->get($this->s3_key), 200, $response);
+        return Response::make($this->storageDisk()->get($this->s3_key), 200, $response);
     }
 
     /**
@@ -151,7 +162,7 @@ class S3
      */
     public function delete(): bool
     {
-        return Storage::disk($this->disk)->delete($this->s3_key);
+        return $this->storageDisk()->delete($this->s3_key);
     }
 
     /**
@@ -161,7 +172,7 @@ class S3
      */
     public function list(): array
     {
-        $storage = Storage::disk($this->disk);
+        $storage = $this->storageDisk();
         $client = $storage->getAdapter()->getClient();
         $command = $client->getCommand('ListObjects');
         $command['Bucket'] = $storage->getAdapter()->getBucket();
@@ -197,7 +208,7 @@ class S3
         list($base, $wildcard) = [dirname($this->s3_key), basename($this->s3_key)];
 
         // Get all of the folders in the base directory
-        $folders = Storage::disk($this->disk)->directories($base);
+        $folders = $this->storageDisk()->directories($base);
 
         // Filter folders to find the wildcard path
         $folders = array_filter($folders, function ($value) use ($base, $wildcard) {
@@ -219,7 +230,7 @@ class S3
     public function allFiles(Closure $closure = null): array
     {
         // Create array of all files
-        $allFiles = Storage::disk($this->disk)->allFiles($this->s3_key);
+        $allFiles = $this->storageDisk()->allFiles($this->s3_key);
 
         if (isset($closure)) {
             return $closure($allFiles);
