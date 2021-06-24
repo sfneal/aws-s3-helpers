@@ -35,3 +35,8 @@ All notable changes to `aws-s3-helpers` will be documented in this file
 
 ## 0.5.1 - 2021-06-23
 - fix issues with `Storage::disk()` method not being declared as static
+
+
+## 0.6.0 - 2021-06-24
+- add `autocompletePath()` method to `S3` for resolving partially complete directory paths with wildcard endings
+- add `allFiles()` method to `S3` for retrieving all files in a directory and then applying a filter
