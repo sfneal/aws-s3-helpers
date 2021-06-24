@@ -182,4 +182,30 @@ class S3
 
         return $files;
     }
+
+    /**
+     * Autocomplete an S3 path by providing the known start of a path.
+     *
+     * - once path autocompletion is resolved the $s3_key property is replaced with the found path
+     *
+     * @return $this
+     */
+    public function autocompletePath(): self
+    {
+        // Extract the known $base of the path & the $wildcard
+        list($base, $wildcard) = [dirname($this->s3_key), basename($this->s3_key)];
+
+        // Get all of the folders in the base directory
+        $folders = Storage::disk($this->disk)->directories($base);
+
+        // Filter folders to find the wildcard path
+        $folders = array_filter($folders, function ($value) use ($base, $wildcard) {
+            return str_starts_with($value, $base . DIRECTORY_SEPARATOR . $wildcard);
+        });
+
+        // return the resolved path
+        $this->s3_key = collect($folders)->values()->first();
+
+        return $this;
+    }
 }
