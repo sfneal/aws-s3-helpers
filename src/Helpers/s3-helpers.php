@@ -2,7 +2,7 @@
 
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\Response;
-use Sfneal\Helpers\Aws\S3\S3;
+use Sfneal\Helpers\Aws\S3\Utils\S3;
 
 /**
  * Return either an S3 file url.
@@ -15,18 +15,21 @@ use Sfneal\Helpers\Aws\S3\S3;
 function fileURL(string $path, bool $temp = true, DateTimeInterface $expiration = null): string
 {
     // todo: refactor to `fileUrl()`
-    return (new S3($path))->url($temp, $expiration);
+    if ($temp) {
+        return (new S3($path))->urlTemp($expiration);
+    } else {
+        return (new S3($path))->url();
+    }
 }
 
 /**
  * Return either a temporary S3 file url.
  *
  * @param string $path
- * @param bool $temp
  * @param DateTimeInterface|null $expiration
  * @return string
  */
-function fileUrlTemp(string $path, bool $temp = true, DateTimeInterface $expiration = null): string
+function fileUrlTemp(string $path, DateTimeInterface $expiration = null): string
 {
     return (new S3($path))->urlTemp($expiration);
 }

@@ -59,17 +59,11 @@ class S3 implements S3Filesystem
     /**
      * Return either an S3 file url.
      *
-     * @param bool $temp
-     * @param DateTimeInterface|null $expiration
      * @return string
      */
-    public function url(bool $temp = true, DateTimeInterface $expiration = null): string
+    public function url(): string
     {
-        if ($temp) {
-            return $this->storageDisk()->temporaryUrl($this->s3Key, $expiration ?? now()->addMinutes(60));
-        } else {
-            return $this->storageDisk()->url($this->s3Key);
-        }
+        return $this->storageDisk()->url($this->s3Key);
     }
 
     /**
@@ -80,7 +74,7 @@ class S3 implements S3Filesystem
      */
     public function urlTemp(DateTimeInterface $expiration = null): string
     {
-        return $this->url(true, $expiration);
+        return $this->storageDisk()->temporaryUrl($this->s3Key, $expiration ?? now()->addMinutes(60));
     }
 
     /**
