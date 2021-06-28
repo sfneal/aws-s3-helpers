@@ -1,6 +1,6 @@
 <?php
 
-namespace Sfneal\Helpers\Aws\S3;
+namespace Sfneal\Helpers\Aws\S3\Utils;
 
 use Closure;
 use DateTimeInterface;
@@ -8,13 +8,14 @@ use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
+use Sfneal\Helpers\Aws\S3\Interfaces\S3Filesystem;
 
-class S3
+class S3 implements S3Filesystem
 {
     /**
      * @var string
      */
-    private $s3_key;
+    private $s3Key;
 
     /**
      * @var string
@@ -28,7 +29,7 @@ class S3
      */
     public function __construct(string $s3_key)
     {
-        $this->s3_key = $s3_key;
+        $this->s3Key = $s3_key;
         $this->disk = config('filesystem.cloud', 's3');
     }
 
@@ -58,17 +59,11 @@ class S3
     /**
      * Return either an S3 file url.
      *
-     * @param bool $temp
-     * @param DateTimeInterface|null $expiration
      * @return string
      */
-    public function url(bool $temp = true, DateTimeInterface $expiration = null): string
+    public function url(): string
     {
-        if ($temp) {
-            return $this->storageDisk()->temporaryUrl($this->s3_key, $expiration ?? now()->addMinutes(60));
-        } else {
-            return $this->storageDisk()->url($this->s3_key);
-        }
+        return $this->storageDisk()->url($this->s3Key);
     }
 
     /**
@@ -79,7 +74,7 @@ class S3
      */
     public function urlTemp(DateTimeInterface $expiration = null): string
     {
-        return $this->url(true, $expiration);
+        return $this->storageDisk()->temporaryUrl($this->s3Key, $expiration ?? now()->addMinutes(60));
     }
 
     /**
@@ -89,22 +84,32 @@ class S3
      */
     public function exists(): bool
     {
-        return $this->storageDisk()->exists($this->s3_key);
+        return $this->storageDisk()->exists($this->s3Key);
+    }
+
+    /**
+     * Determine if an S3 file is missing.
+     *
+     * @return bool
+     */
+    public function missing(): bool
+    {
+        return ! $this->exists();
     }
 
     /**
      * Upload a file to an S3 bucket.
      *
-     * @param string $file_path
+     * @param string $localFilePath
      * @param string|null $acl
      * @return string
      */
-    public function upload(string $file_path, string $acl = null): string
+    public function upload(string $localFilePath, string $acl = null): string
     {
         if (is_null($acl)) {
-            $this->storageDisk()->put($this->s3_key, fopen($file_path, 'r+'));
+            $this->storageDisk()->put($this->s3Key, fopen($localFilePath, 'r+'));
         } else {
-            $this->storageDisk()->put($this->s3_key, fopen($file_path, 'r+'), $acl);
+            $this->storageDisk()->put($this->s3Key, fopen($localFilePath, 'r+'), $acl);
         }
 
         return $this->url();
@@ -113,16 +118,16 @@ class S3
     /**
      * Upload raw file contents to an S3 bucket.
      *
-     * @param string $file_contents
+     * @param string $fileContents
      * @param string|null $acl
      * @return string
      */
-    public function upload_raw(string $file_contents, string $acl = null): string
+    public function upload_raw(string $fileContents, string $acl = null): string
     {
         if (is_null($acl)) {
-            $this->storageDisk()->put($this->s3_key, $file_contents);
+            $this->storageDisk()->put($this->s3Key, $fileContents);
         } else {
-            $this->storageDisk()->put($this->s3_key, $file_contents, $acl);
+            $this->storageDisk()->put($this->s3Key, $fileContents, $acl);
         }
 
         return $this->url();
@@ -131,28 +136,28 @@ class S3
     /**
      * Download a file from an S3 bucket.
      *
-     * @param string|null $file_name
+     * @param string|null $fileName
      * @return \Illuminate\Http\Response
      * @throws FileNotFoundException|\League\Flysystem\FileNotFoundException
      */
-    public function download(string $file_name = null): \Illuminate\Http\Response
+    public function download(string $fileName = null): \Illuminate\Http\Response
     {
-        if (is_null($file_name)) {
-            $file_name = basename($this->s3_key);
+        if (is_null($fileName)) {
+            $fileName = basename($this->s3Key);
         }
 
-        $mime = $this->storageDisk()->getMimetype($this->s3_key);
-        $size = $this->storageDisk()->getSize($this->s3_key);
+        $mime = $this->storageDisk()->getMimetype($this->s3Key);
+        $size = $this->storageDisk()->getSize($this->s3Key);
 
         $response = [
             'Content-Type' => $mime,
             'Content-Length' => $size,
             'Content-Description' => 'File Transfer',
-            'Content-Disposition' => "attachment; filename={$file_name}",
+            'Content-Disposition' => "attachment; filename={$fileName}",
             'Content-Transfer-Encoding' => 'binary',
         ];
 
-        return Response::make($this->storageDisk()->get($this->s3_key), 200, $response);
+        return Response::make($this->storageDisk()->get($this->s3Key), 200, $response);
     }
 
     /**
@@ -162,7 +167,7 @@ class S3
      */
     public function delete(): bool
     {
-        return $this->storageDisk()->delete($this->s3_key);
+        return $this->storageDisk()->delete($this->s3Key);
     }
 
     /**
@@ -176,7 +181,7 @@ class S3
         $client = $storage->getAdapter()->getClient();
         $command = $client->getCommand('ListObjects');
         $command['Bucket'] = $storage->getAdapter()->getBucket();
-        $command['Prefix'] = $this->s3_key;
+        $command['Prefix'] = $this->s3Key;
         $result = $client->execute($command);
 
         $files = [];
@@ -205,8 +210,8 @@ class S3
     public function autocompletePath(): self
     {
         // Extract the known $base of the path & the $wildcard
-        $base = dirname($this->s3_key);
-        $wildcard = basename($this->s3_key);
+        $base = dirname($this->s3Key);
+        $wildcard = basename($this->s3Key);
 
         // Get all of the folders in the base directory
         $folders = $this->storageDisk()->directories($base);
@@ -217,7 +222,7 @@ class S3
         });
 
         // return the resolved path
-        $this->s3_key = collect($folders)->values()->first();
+        $this->s3Key = collect($folders)->values()->first();
 
         return $this;
     }
@@ -231,7 +236,7 @@ class S3
     public function allFiles(Closure $closure = null): array
     {
         // Create array of all files
-        $allFiles = $this->storageDisk()->allFiles($this->s3_key);
+        $allFiles = $this->storageDisk()->allFiles($this->s3Key);
 
         // Apply filtering closure
         if (isset($closure)) {
@@ -239,5 +244,24 @@ class S3
         }
 
         return $allFiles;
+    }
+
+    /**
+     * Retrieve an array of all directories within another directory with an optional filtering closure.
+     *
+     * @param Closure|null $closure
+     * @return array
+     */
+    public function allDirectories(Closure $closure = null): array
+    {
+        // Create array of all directories
+        $allDirectories = $this->storageDisk()->allDirectories($this->s3Key);
+
+        // Apply filtering closure
+        if (isset($closure)) {
+            return array_filter(array_values($allDirectories), $closure);
+        }
+
+        return $allDirectories;
     }
 }

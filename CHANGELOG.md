@@ -48,3 +48,10 @@ All notable changes to `aws-s3-helpers` will be documented in this file
 
 ## 0.6.2 - 2021-06-28
 - refactor helper functions file to 'src/Helpers' directory
+
+
+## 0.7.0 - 2021-06-28
+- add league/flysystem-aws-s3-v3 & aws/aws-sdk-php composer dependency
+- add `missing()` method to `S3Filesystem` interface & `S3` implementation
+- cut support for php7.3 & below
+- start creating test suite
