@@ -13,7 +13,7 @@ class ExistsTest extends StorageS3TestCase
         $exists = StorageS3::key($this->file)->exists();
 
         $this->assertIsBool($exists);
-        $this->assertTrue($exists);
+        $this->assertTrue($exists, "The file '{$this->file}' doesn't exist.");
     }
 
     /** @test */
