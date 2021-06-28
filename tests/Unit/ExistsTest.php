@@ -26,6 +26,15 @@ class ExistsTest extends StorageS3TestCase
     }
 
     /** @test */
+    public function file_missing()
+    {
+        $doesntExist = StorageS3::key("fake_file_{$this->file}")->missing();
+
+        $this->assertIsBool($doesntExist);
+        $this->assertTrue($doesntExist);
+    }
+
+    /** @test */
     public function directory_exists()
     {
         $exists = StorageS3::key('directory')->exists();
@@ -41,5 +50,14 @@ class ExistsTest extends StorageS3TestCase
 
         $this->assertIsBool($doesntExist);
         $this->assertFalse($doesntExist);
+    }
+
+    /** @test */
+    public function directory_missing()
+    {
+        $doesntExist = StorageS3::key("fake_directory")->missing();
+
+        $this->assertIsBool($doesntExist);
+        $this->assertTrue($doesntExist);
     }
 }

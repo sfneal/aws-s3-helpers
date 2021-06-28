@@ -88,6 +88,16 @@ class S3 implements S3Filesystem
     }
 
     /**
+     * Determine if an S3 file is missing.
+     *
+     * @return bool
+     */
+    public function missing(): bool
+    {
+        return ! $this->exists();
+    }
+
+    /**
      * Upload a file to an S3 bucket.
      *
      * @param string $localFilePath

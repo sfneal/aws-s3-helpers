@@ -32,6 +32,13 @@ interface S3Filesystem
     public function exists(): bool;
 
     /**
+     * Determine if an S3 file is missing.
+     *
+     * @return bool
+     */
+    public function missing(): bool;
+
+    /**
      * Upload a file to AWS S3.
      *
      * @param string $localFilePath
