@@ -10,15 +10,28 @@ class UrlTest extends TestCase
 {
     use RandomFile;
 
+    /**
+     * @var string
+     */
+    private $file;
+
+    /**
+     * Setup the test environment.
+     *
+     * @return void
+     */
+    protected function setUp(): void
+    {
+        $this->file = self::randomFile();
+        parent::setUp();
+    }
+
     /** @test */
     public function url_is_valid()
     {
-        $file = self::randomFile();
-        $url = StorageS3::key($file)->url();
+        $url = StorageS3::key($this->file)->url();
 
         $this->assertNotNull($url);
         $this->assertIsString($url);
-
-        // todo: add response testing
     }
 }
