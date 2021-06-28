@@ -22,7 +22,6 @@ trait RandomFile
     public static function randomFile(): string
     {
         $files = self::files();
-        print_r($files);
         $file = array_rand($files);
 
         return $files[$file];
