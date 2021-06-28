@@ -22,7 +22,6 @@ class ConfigTest extends TestCase
 
         $this->assertIsArray(config("filesystems.disks.s3"));
 
-
         foreach ($keys as $key) {
             $this->assertNotNull(config("filesystems.disks.s3.{$key}"));
             $this->assertIsString(config("filesystems.disks.s3.{$key}"));
