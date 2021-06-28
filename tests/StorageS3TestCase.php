@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Sfneal\Helpers\Aws\S3\Tests;
-
 
 class StorageS3TestCase extends TestCase
 {

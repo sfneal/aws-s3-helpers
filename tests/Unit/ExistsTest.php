@@ -46,7 +46,7 @@ class ExistsTest extends StorageS3TestCase
     /** @test */
     public function directory_doesnt_exist()
     {
-        $doesntExist = StorageS3::key("fake_directory")->exists();
+        $doesntExist = StorageS3::key('fake_directory')->exists();
 
         $this->assertIsBool($doesntExist);
         $this->assertFalse($doesntExist);
@@ -55,7 +55,7 @@ class ExistsTest extends StorageS3TestCase
     /** @test */
     public function directory_missing()
     {
-        $doesntExist = StorageS3::key("fake_directory")->missing();
+        $doesntExist = StorageS3::key('fake_directory')->missing();
 
         $this->assertIsBool($doesntExist);
         $this->assertTrue($doesntExist);
