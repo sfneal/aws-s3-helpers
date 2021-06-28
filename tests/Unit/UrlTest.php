@@ -3,29 +3,10 @@
 namespace Sfneal\Helpers\Aws\S3\Tests\Unit;
 
 use Sfneal\Helpers\Aws\S3\StorageS3;
-use Sfneal\Helpers\Aws\S3\Tests\TestCase;
-use Sfneal\Helpers\Aws\S3\Tests\Unit\Traits\RandomFile;
+use Sfneal\Helpers\Aws\S3\Tests\StorageS3TestCase;
 
-class UrlTest extends TestCase
+class UrlTest extends StorageS3TestCase
 {
-    use RandomFile;
-
-    /**
-     * @var string
-     */
-    private $file;
-
-    /**
-     * Setup the test environment.
-     *
-     * @return void
-     */
-    protected function setUp(): void
-    {
-        $this->file = self::randomFile();
-        parent::setUp();
-    }
-
     /** @test */
     public function url_is_valid()
     {
