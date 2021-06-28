@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Sfneal\Helpers\Aws\S3\Tests\Unit\Traits;
-
 
 trait RandomFile
 {
@@ -13,7 +11,7 @@ trait RandomFile
      */
     private static function files(): array
     {
-        return array_diff(scandir(__DIR__.'/../../Assets'), array('.', '..'));
+        return array_diff(scandir(__DIR__.'/../../Assets'), ['.', '..']);
     }
 
     /**
@@ -26,6 +24,7 @@ trait RandomFile
         $files = self::files();
         print_r($files);
         $file = array_rand($files);
+
         return $files[$file];
     }
 }
