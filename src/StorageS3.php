@@ -2,6 +2,8 @@
 
 namespace Sfneal\Helpers\Aws\S3;
 
+use Sfneal\Helpers\Aws\S3\Utils\S3;
+
 class StorageS3
 {
     /**
