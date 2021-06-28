@@ -34,7 +34,7 @@
             "Sfneal\\Helpers\\Aws\\S3\\Tests\\": "tests"
         },
         "files": [
-            "src/s3-helpers.php"
+            "src/Helpers/s3-helpers.php"
         ]
     },
     "scripts": {
