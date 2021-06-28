@@ -44,3 +44,7 @@ All notable changes to `aws-s3-helpers` will be documented in this file
 
 ## 0.6.1 - 2021-06-24
 - cut default autoloading of 's3-helpers' helper function, now they must be manually autoloaded to avoid function name conflicts
+
+
+## 0.6.2 - 2021-06-28
+- refactor helper functions file to 'src/Helpers' directory

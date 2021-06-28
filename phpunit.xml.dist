@@ -26,4 +26,11 @@
         <log type="coverage-text" target="build/coverage.txt"/>
         <log type="coverage-clover" target="build/logs/clover.xml"/>
     </logging>
+    <php>
+        <env name="S3_KEY" value=""/>
+        <env name="S3_SECRET" value=""/>
+        <env name="S3_REGION" value="us-east-1"/>
+        <env name="S3_BUCKET" value=""/>
+        <env name="S3_ROOT" value="tests/aws-s3-helpers"/>
+    </php>
 </phpunit>

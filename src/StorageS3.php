@@ -16,7 +16,7 @@ class StorageS3
     }
 
     /**
-     * * Instantiate an S3 object while providing a filesystem disk and an S3 object key.
+     * Instantiate an S3 object while providing a filesystem disk and an S3 object key.
      *
      * @param string $disk
      * @param string $key
