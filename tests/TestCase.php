@@ -3,6 +3,7 @@
 namespace Sfneal\Helpers\Aws\S3\Tests;
 
 use Illuminate\Foundation\Application;
+use Illuminate\Foundation\Bootstrap\LoadEnvironmentVariables;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Orchestra\Testbench\TestCase as OrchestraTestCase;
 
@@ -18,15 +19,21 @@ class TestCase extends OrchestraTestCase
      */
     protected function getEnvironmentSetUp($app)
     {
+        // make sure, our .env file is loaded
+        $app->useEnvironmentPath(__DIR__.'/..');
+        $app->bootstrapWith([LoadEnvironmentVariables::class]);
+
         $app['config']->set('filesystems.disks.s3', [
             'driver' => 's3',
-            'key' => env('S3_KEY'),
-            'secret' => env('S3_SECRET'),
-            'region' => env('S3_REGION'),
-            'bucket' => env('S3_BUCKET'),
-            'root' => env('S3_ROOT'),
+            'key' => getenv('S3_KEY'),
+            'secret' => getenv('S3_SECRET'),
+            'region' => getenv('S3_REGION'),
+            'bucket' => getenv('S3_BUCKET'),
+            'root' => getenv('S3_ROOT'),
         ]);
 
         $app['config']->set('filesystems.default', 's3');
+
+        parent::getEnvironmentSetUp($app);
     }
 }
