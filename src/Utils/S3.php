@@ -112,6 +112,7 @@ class S3 implements S3Filesystem
             $this->storageDisk()->put($this->s3Key, fopen($localFilePath, 'r+'), $acl);
         }
 
+        // todo: refactor to return 'self'
         return $this->url();
     }
 
@@ -130,6 +131,7 @@ class S3 implements S3Filesystem
             $this->storageDisk()->put($this->s3Key, $fileContents, $acl);
         }
 
+        // todo: refactor to return 'self'
         return $this->url();
     }
 
