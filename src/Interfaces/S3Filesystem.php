@@ -25,20 +25,6 @@ interface S3Filesystem
     public function urlTemp(DateTimeInterface $expiration = null): string;
 
     /**
-     * Determine if an S3 file exists.
-     *
-     * @return bool
-     */
-    public function exists(): bool;
-
-    /**
-     * Determine if an S3 file is missing.
-     *
-     * @return bool
-     */
-    public function missing(): bool;
-
-    /**
      * Upload a file to AWS S3.
      *
      * @param string $localFilePath
@@ -65,13 +51,6 @@ interface S3Filesystem
      * @throws \League\Flysystem\FileNotFoundException
      */
     public function download(string $fileName = null): Response;
-
-    /**
-     * Delete a file or folder from an S3 bucket.
-     *
-     * @return bool
-     */
-    public function delete(): bool;
 
     /**
      * List all of the files in an S3 directory & return an array of files with constructed URLs.

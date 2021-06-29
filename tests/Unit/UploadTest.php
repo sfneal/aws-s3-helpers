@@ -40,7 +40,7 @@ class UploadTest extends StorageS3TestCase
     {
         StorageS3::key($this->uploadPath)->upload(__DIR__.'/../Assets/'.$this->file);
 
-        $exists = StorageS3::key($this->uploadPath)->exists();
+        $exists = Storage::disk('s3')->exists($this->uploadPath);
 
         $this->assertIsBool($exists);
         $this->assertTrue($exists, "The file '{$this->file}' doesn't exist.");
@@ -51,7 +51,7 @@ class UploadTest extends StorageS3TestCase
     {
         StorageS3::key($this->uploadPath)->upload_raw(file_get_contents(__DIR__.'/../Assets/'.$this->file));
 
-        $exists = StorageS3::key($this->uploadPath)->exists();
+        $exists = Storage::disk('s3')->exists($this->uploadPath);
 
         $this->assertIsBool($exists);
         $this->assertTrue($exists, "The file '{$this->file}' doesn't exist.");
