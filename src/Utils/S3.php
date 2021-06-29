@@ -6,6 +6,7 @@ use Closure;
 use DateTimeInterface;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Contracts\Filesystem\Filesystem;
+use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
 use Sfneal\Helpers\Aws\S3\Interfaces\S3Filesystem;
@@ -36,9 +37,9 @@ class S3 implements S3Filesystem
     /**
      * Retrieve a Filesystem instance for the specified disk.
      *
-     * @return Filesystem
+     * @return Filesystem|FilesystemAdapter
      */
-    private function storageDisk(): Filesystem
+    private function storageDisk(): FilesystemAdapter
     {
         return Storage::disk($this->disk);
     }
