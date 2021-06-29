@@ -64,3 +64,8 @@ All notable changes to `aws-s3-helpers` will be documented in this file
 ## 0.7.2 - 2021-06-29
 - fix issue with `s3_exists()` helper function breaking (fixed for use in blades to avoid imports)
 - cut `s3_delete()` helper function as imports should be used instead
+
+
+## 0.7.3 - 2021-06-29
+- make `HelpersTest` for testing helper functions
+- cut `s3_upload()`, `s3_download()` `s3_upload_raw()` & `s3_list()` helper functions

@@ -1,7 +1,5 @@
 <?php
 
-use Illuminate\Contracts\Filesystem\FileNotFoundException;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
 use Sfneal\Helpers\Aws\S3\Utils\S3;
 
@@ -44,54 +42,4 @@ function fileUrlTemp(string $path, DateTimeInterface $expiration = null): string
 function s3_exists(string $s3_key): bool
 {
     return Storage::disk('s3')->exists($s3_key);
-}
-
-/**
- * Upload a file to an S3 bucket.
- *
- * @param $s3_key
- * @param $file_path
- * @param null $acl
- * @return string
- */
-function s3_upload($s3_key, $file_path, $acl = null): string
-{
-    return (new S3($s3_key))->upload($file_path, $acl);
-}
-
-/**
- * Download a file from an S3 bucket.
- *
- * @param $file_url
- * @param string|null $file_name
- * @return Response
- * @throws FileNotFoundException|\League\Flysystem\FileNotFoundException
- */
-function s3_download($file_url, string $file_name = null): Response
-{
-    return (new S3($file_url))->download($file_name);
-}
-
-/**
- * Upload raw file contents to an S3 bucket.
- *
- * @param $s3_key
- * @param string $file_contents
- * @param string|null $acl
- * @return string
- */
-function s3_upload_raw($s3_key, string $file_contents, string $acl = null): string
-{
-    return (new S3($s3_key))->upload_raw($file_contents, $acl);
-}
-
-/**
- * List all of the files in an S3 directory.
- *
- * @param $s3_key
- * @return array
- */
-function s3_list($s3_key): array
-{
-    return (new S3($s3_key))->list();
 }
