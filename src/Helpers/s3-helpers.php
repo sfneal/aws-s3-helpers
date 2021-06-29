@@ -11,7 +11,7 @@ use Sfneal\Helpers\Aws\S3\Utils\S3;
  * @param DateTimeInterface|null $expiration
  * @return string
  */
-function fileURL(string $path, bool $temp = true, DateTimeInterface $expiration = null): string
+function s3FileURL(string $path, bool $temp = true, DateTimeInterface $expiration = null): string
 {
     // todo: refactor to `fileUrl()`
     if ($temp) {
@@ -22,13 +22,13 @@ function fileURL(string $path, bool $temp = true, DateTimeInterface $expiration 
 }
 
 /**
- * Return either a temporary S3 file url.
+ * Return a temporary S3 file url.
  *
  * @param string $path
  * @param DateTimeInterface|null $expiration
  * @return string
  */
-function fileUrlTemp(string $path, DateTimeInterface $expiration = null): string
+function s3FileUrlTemp(string $path, DateTimeInterface $expiration = null): string
 {
     return (new S3($path))->urlTemp($expiration);
 }
@@ -39,7 +39,7 @@ function fileUrlTemp(string $path, DateTimeInterface $expiration = null): string
  * @param string $s3_key
  * @return bool
  */
-function s3_exists(string $s3_key): bool
+function s3Exists(string $s3_key): bool
 {
     return Storage::disk('s3')->exists($s3_key);
 }

@@ -69,3 +69,7 @@ All notable changes to `aws-s3-helpers` will be documented in this file
 ## 0.7.3 - 2021-06-29
 - make `HelpersTest` for testing helper functions
 - cut `s3_upload()`, `s3_download()` `s3_upload_raw()` & `s3_list()` helper functions
+
+
+## 0.8.0 - 2021-06-29
+- refactor helper functions to use camel case syntax & 's3{}' prefixes

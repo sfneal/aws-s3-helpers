@@ -160,7 +160,7 @@ class S3 implements S3Filesystem
         $files = [];
         if (isset($result['Contents']) && ! empty($result['Contents'])) {
             foreach ($result['Contents'] as $content) {
-                $url = fileURL($content['Key']);
+                $url = s3FileURL($content['Key']);
                 $parts = explode('/', explode('?', $url, 2)[0]);
                 $files[] = [
                     'name' => end($parts),

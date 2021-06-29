@@ -10,7 +10,7 @@ class HelpersTest extends StorageS3TestCase
     /** @test */
     public function file_url_exists()
     {
-        $url = fileURL($this->file, false);
+        $url = s3FileURL($this->file, false);
 
         $this->assertNotNull($url);
         $this->assertIsString($url);
@@ -20,7 +20,7 @@ class HelpersTest extends StorageS3TestCase
     /** @test */
     public function file_url_temp_exists()
     {
-        $url = fileUrlTemp($this->file);
+        $url = s3FileUrlTemp($this->file);
 
         $this->assertNotNull($url);
         $this->assertIsString($url);
@@ -31,7 +31,7 @@ class HelpersTest extends StorageS3TestCase
     /** @test */
     public function file_exists()
     {
-        $exists = s3_exists($this->file);
+        $exists = s3Exists($this->file);
 
         $this->assertIsBool($exists);
         $this->assertTrue($exists, "The file '{$this->file}' doesn't exist.");
@@ -40,7 +40,7 @@ class HelpersTest extends StorageS3TestCase
     /** @test */
     public function file_doesnt_exist()
     {
-        $doesntExist = s3_exists("fake_file_{$this->file}");
+        $doesntExist = s3Exists("fake_file_{$this->file}");
 
         $this->assertIsBool($doesntExist);
         $this->assertFalse($doesntExist);
@@ -49,7 +49,7 @@ class HelpersTest extends StorageS3TestCase
     /** @test */
     public function directory_exists()
     {
-        $exists = s3_exists('directory');
+        $exists = s3Exists('directory');
 
         $this->assertIsBool($exists);
         $this->assertTrue($exists);
@@ -58,7 +58,7 @@ class HelpersTest extends StorageS3TestCase
     /** @test */
     public function directory_doesnt_exist()
     {
-        $doesntExist = s3_exists('fake_directory');
+        $doesntExist = s3Exists('fake_directory');
 
         $this->assertIsBool($doesntExist);
         $this->assertFalse($doesntExist);
