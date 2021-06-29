@@ -6,6 +6,7 @@ use Closure;
 use DateTimeInterface;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Contracts\Filesystem\Filesystem;
+use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
 use Sfneal\Helpers\Aws\S3\Interfaces\S3Filesystem;
@@ -36,9 +37,9 @@ class S3 implements S3Filesystem
     /**
      * Retrieve a Filesystem instance for the specified disk.
      *
-     * @return Filesystem
+     * @return Filesystem|FilesystemAdapter
      */
-    private function storageDisk(): Filesystem
+    private function storageDisk(): FilesystemAdapter
     {
         return Storage::disk($this->disk);
     }
@@ -78,26 +79,6 @@ class S3 implements S3Filesystem
     }
 
     /**
-     * Determine if an S3 file exists.
-     *
-     * @return bool
-     */
-    public function exists(): bool
-    {
-        return $this->storageDisk()->exists($this->s3Key);
-    }
-
-    /**
-     * Determine if an S3 file is missing.
-     *
-     * @return bool
-     */
-    public function missing(): bool
-    {
-        return ! $this->exists();
-    }
-
-    /**
      * Upload a file to an S3 bucket.
      *
      * @param string $localFilePath
@@ -112,6 +93,7 @@ class S3 implements S3Filesystem
             $this->storageDisk()->put($this->s3Key, fopen($localFilePath, 'r+'), $acl);
         }
 
+        // todo: refactor to return 'self'
         return $this->url();
     }
 
@@ -130,6 +112,7 @@ class S3 implements S3Filesystem
             $this->storageDisk()->put($this->s3Key, $fileContents, $acl);
         }
 
+        // todo: refactor to return 'self'
         return $this->url();
     }
 
@@ -158,16 +141,6 @@ class S3 implements S3Filesystem
         ];
 
         return Response::make($this->storageDisk()->get($this->s3Key), 200, $response);
-    }
-
-    /**
-     * Delete a file or folder from an S3 bucket.
-     *
-     * @return bool
-     */
-    public function delete(): bool
-    {
-        return $this->storageDisk()->delete($this->s3Key);
     }
 
     /**

@@ -55,3 +55,7 @@ All notable changes to `aws-s3-helpers` will be documented in this file
 - add `missing()` method to `S3Filesystem` interface & `S3` implementation
 - cut support for php7.3 & below
 - start creating test suite
+
+
+## 0.7.1 - 2021-06-29
+- cut `exists()`, `missing()` & `delete()` methods from `S3Filesystem` interface & `S3` implementation because they are functionally the same as `Storage` facade methods
