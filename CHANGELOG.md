@@ -59,3 +59,8 @@ All notable changes to `aws-s3-helpers` will be documented in this file
 
 ## 0.7.1 - 2021-06-29
 - cut `exists()`, `missing()` & `delete()` methods from `S3Filesystem` interface & `S3` implementation because they are functionally the same as `Storage` facade methods
+
+
+## 0.7.2 - 2021-06-29
+- fix issue with `s3_exists()` helper function breaking (fixed for use in blades to avoid imports)
+- cut `s3_delete()` helper function as imports should be used instead

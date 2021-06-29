@@ -2,6 +2,7 @@
 
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Storage;
 use Sfneal\Helpers\Aws\S3\Utils\S3;
 
 /**
@@ -42,7 +43,7 @@ function fileUrlTemp(string $path, DateTimeInterface $expiration = null): string
  */
 function s3_exists(string $s3_key): bool
 {
-    return (new S3($s3_key))->exists();
+    return Storage::disk('s3')->exists($s3_key);
 }
 
 /**
@@ -69,17 +70,6 @@ function s3_upload($s3_key, $file_path, $acl = null): string
 function s3_download($file_url, string $file_name = null): Response
 {
     return (new S3($file_url))->download($file_name);
-}
-
-/**
- * Delete a file or folder from an S3 bucket.
- *
- * @param $s3_key
- * @return bool
- */
-function s3_delete($s3_key): bool
-{
-    return (new S3($s3_key))->delete();
 }
 
 /**
