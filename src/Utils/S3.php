@@ -194,14 +194,14 @@ class S3 implements S3Filesystem
     public function autocompletePath(): self
     {
         // Extract the known $base of the path & the $wildcard
-        list($base, $wildcard) = [dirname($this->s3Key), basename($this->s3Key)];
+        $directory = dirname($this->s3Key);
 
         // Get all of the folders in the base directory
-        $folders = $this->storageDisk()->directories($base);
+        $folders = $this->storageDisk()->directories($directory);
 
         // Filter folders to find the wildcard path
-        $folders = array_filter($folders, function ($value) use ($base, $wildcard) {
-            return str_starts_with($value, $base.DIRECTORY_SEPARATOR.$wildcard);
+        $folders = array_filter($folders, function ($value) {
+            return str_starts_with($value, $this->s3Key);
         });
 
         // return the resolved path
