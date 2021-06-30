@@ -98,23 +98,17 @@ class S3 implements S3Filesystem
      */
     public function upload(string $localFilePath, string $acl = null): self
     {
-        if (is_null($acl)) {
-            $this->storageDisk()->put($this->s3Key, fopen($localFilePath, 'r+'));
-        } else {
-            $this->storageDisk()->put($this->s3Key, fopen($localFilePath, 'r+'), $acl);
-        }
-
-        return $this;
+        return $this->upload_raw(fopen($localFilePath, 'r+'), $acl);
     }
 
     /**
      * Upload raw file contents to an S3 bucket.
      *
-     * @param string $fileContents
+     * @param $fileContents
      * @param string|null $acl
      * @return self
      */
-    public function upload_raw(string $fileContents, string $acl = null): self
+    public function upload_raw($fileContents, string $acl = null): self
     {
         if (is_null($acl)) {
             $this->storageDisk()->put($this->s3Key, $fileContents);

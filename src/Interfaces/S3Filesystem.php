@@ -36,11 +36,11 @@ interface S3Filesystem
     /**
      * Upload raw file contents to AWS S3.
      *
-     * @param string $fileContents
+     * @param $fileContents
      * @param string|null $acl
      * @return self
      */
-    public function upload_raw(string $fileContents, string $acl = null): self;
+    public function upload_raw($fileContents, string $acl = null): self;
 
     /**
      * Download a file from AWS S3.
