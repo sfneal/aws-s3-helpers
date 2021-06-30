@@ -94,37 +94,25 @@ class S3 implements S3Filesystem
      *
      * @param string $localFilePath
      * @param string|null $acl
-     * @return string
+     * @return self
      */
-    public function upload(string $localFilePath, string $acl = null): string
+    public function upload(string $localFilePath, string $acl = null): self
     {
-        if (is_null($acl)) {
-            $this->storageDisk()->put($this->s3Key, fopen($localFilePath, 'r+'));
-        } else {
-            $this->storageDisk()->put($this->s3Key, fopen($localFilePath, 'r+'), $acl);
-        }
-
-        // todo: refactor to return 'self'
-        return $this->url();
+        return $this->uploadRaw(fopen($localFilePath, 'r+'), $acl);
     }
 
     /**
      * Upload raw file contents to an S3 bucket.
      *
-     * @param string $fileContents
+     * @param $fileContents
      * @param string|null $acl
-     * @return string
+     * @return self
      */
-    public function upload_raw(string $fileContents, string $acl = null): string
+    public function uploadRaw($fileContents, string $acl = null): self
     {
-        if (is_null($acl)) {
-            $this->storageDisk()->put($this->s3Key, $fileContents);
-        } else {
-            $this->storageDisk()->put($this->s3Key, $fileContents, $acl);
-        }
+        $this->storageDisk()->put($this->s3Key, $fileContents, $acl);
 
-        // todo: refactor to return 'self'
-        return $this->url();
+        return $this;
     }
 
     /**
