@@ -110,11 +110,7 @@ class S3 implements S3Filesystem
      */
     public function upload_raw($fileContents, string $acl = null): self
     {
-        if (is_null($acl)) {
-            $this->storageDisk()->put($this->s3Key, $fileContents);
-        } else {
-            $this->storageDisk()->put($this->s3Key, $fileContents, $acl);
-        }
+        $this->storageDisk()->put($this->s3Key, $fileContents, $acl);
 
         return $this;
     }
