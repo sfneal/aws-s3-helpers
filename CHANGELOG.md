@@ -79,3 +79,8 @@ All notable changes to `aws-s3-helpers` will be documented in this file
 - fix issues with `autocompletePath()` method causing errors when resolving paths in the root directory
 - add `getKey()` method to `S3`
 - make `AllDirectoriesTest`, `AllFilesTest`, `AutocompletePathTest` & `DownloadTest`
+
+
+## 0.9.0 - 2021-06-30
+- fix return type of `S3` upload function to return the class instance instead of a url
+- optimize `S3::upload()` & `S3::upload_raw()` methods
