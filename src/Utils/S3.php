@@ -46,7 +46,7 @@ class S3 implements S3Filesystem
     }
 
     /**
-     * Retrieve the S3 key (useful in conjunctions with `autocompletePath()` method)
+     * Retrieve the S3 key (useful in conjunctions with `autocompletePath()` method).
      *
      * @return string
      */
