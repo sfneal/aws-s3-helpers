@@ -46,6 +46,16 @@ class S3 implements S3Filesystem
     }
 
     /**
+     * Retrieve the S3 key (useful in conjunctions with `autocompletePath()` method)
+     *
+     * @return string
+     */
+    public function getKey(): string
+    {
+        return $this->s3Key;
+    }
+
+    /**
      * Set the filesystem disk.
      *
      * @param string $disk
@@ -184,8 +194,7 @@ class S3 implements S3Filesystem
     public function autocompletePath(): self
     {
         // Extract the known $base of the path & the $wildcard
-        $base = dirname($this->s3Key);
-        $wildcard = basename($this->s3Key);
+        list($base, $wildcard) = [dirname($this->s3Key), basename($this->s3Key)];
 
         // Get all of the folders in the base directory
         $folders = $this->storageDisk()->directories($base);
