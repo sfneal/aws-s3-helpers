@@ -73,3 +73,9 @@ All notable changes to `aws-s3-helpers` will be documented in this file
 
 ## 0.8.0 - 2021-06-29
 - refactor helper functions to use camel case syntax & 's3{}' prefixes
+
+
+## 0.8.1 - 2021-06-30
+- fix issues with `autocompletePath()` method causing errors when resolving paths in the root directory
+- add `getKey()` method to `S3`
+- make `AllDirectoriesTest`, `AllFilesTest`, `AutocompletePathTest` & `DownloadTest`
