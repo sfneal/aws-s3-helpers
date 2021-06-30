@@ -13,7 +13,6 @@ use Sfneal\Helpers\Aws\S3\Utils\S3;
  */
 function s3FileURL(string $path, bool $temp = true, DateTimeInterface $expiration = null): string
 {
-    // todo: refactor to `fileUrl()`
     if ($temp) {
         return (new S3($path))->urlTemp($expiration);
     } else {

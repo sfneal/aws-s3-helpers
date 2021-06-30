@@ -10,6 +10,7 @@ use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
 use Sfneal\Helpers\Aws\S3\Interfaces\S3Filesystem;
+use Sfneal\Helpers\Aws\S3\StorageS3;
 
 class S3 implements S3Filesystem
 {
@@ -42,6 +43,16 @@ class S3 implements S3Filesystem
     private function storageDisk(): FilesystemAdapter
     {
         return Storage::disk($this->disk);
+    }
+
+    /**
+     * Retrieve the S3 key (useful in conjunctions with `autocompletePath()` method).
+     *
+     * @return string
+     */
+    public function getKey(): string
+    {
+        return $this->s3Key;
     }
 
     /**
@@ -160,7 +171,7 @@ class S3 implements S3Filesystem
         $files = [];
         if (isset($result['Contents']) && ! empty($result['Contents'])) {
             foreach ($result['Contents'] as $content) {
-                $url = s3FileURL($content['Key']);
+                $url = StorageS3::key($content['Key'])->urlTemp();
                 $parts = explode('/', explode('?', $url, 2)[0]);
                 $files[] = [
                     'name' => end($parts),
@@ -183,15 +194,14 @@ class S3 implements S3Filesystem
     public function autocompletePath(): self
     {
         // Extract the known $base of the path & the $wildcard
-        $base = dirname($this->s3Key);
-        $wildcard = basename($this->s3Key);
+        $directory = dirname($this->s3Key);
 
         // Get all of the folders in the base directory
-        $folders = $this->storageDisk()->directories($base);
+        $folders = $this->storageDisk()->directories($directory);
 
         // Filter folders to find the wildcard path
-        $folders = array_filter($folders, function ($value) use ($base, $wildcard) {
-            return str_starts_with($value, $base.DIRECTORY_SEPARATOR.$wildcard);
+        $folders = array_filter($folders, function ($value) {
+            return str_starts_with($value, $this->s3Key);
         });
 
         // return the resolved path
