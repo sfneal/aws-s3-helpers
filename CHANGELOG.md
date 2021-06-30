@@ -84,3 +84,4 @@ All notable changes to `aws-s3-helpers` will be documented in this file
 ## 0.9.0 - 2021-06-30
 - fix return type of `S3` upload function to return the class instance instead of a url
 - optimize `S3::upload()` & `S3::upload_raw()` methods
+- refactor `S3::upload_raw()` to `S3::uploadRaw()`

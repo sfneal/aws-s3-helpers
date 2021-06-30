@@ -40,7 +40,7 @@ interface S3Filesystem
      * @param string|null $acl
      * @return self
      */
-    public function upload_raw($fileContents, string $acl = null): self;
+    public function uploadRaw($fileContents, string $acl = null): self;
 
     /**
      * Download a file from AWS S3.

@@ -52,7 +52,7 @@ class UploadTest extends StorageS3TestCase
     public function file_can_be_uploaded_raw()
     {
         $s3Key = StorageS3::key($this->uploadPath)
-            ->upload_raw(file_get_contents(__DIR__.'/../Assets/'.$this->file))
+            ->uploadRaw(file_get_contents(__DIR__.'/../Assets/'.$this->file))
             ->getKey();
 
         $exists = Storage::disk('s3')->exists($s3Key);
