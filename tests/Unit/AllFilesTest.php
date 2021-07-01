@@ -13,7 +13,7 @@ class AllFilesTest extends TestCase
         $this->assertNotNull($allFiles);
         $this->assertIsArray($allFiles);
 
-        foreach($expected as $expect) {
+        foreach ($expected as $expect) {
             $this->assertTrue(in_array($expect, $allFiles));
             Storage::disk(config('filesystem.cloud', 's3'))->exists($expect);
         }

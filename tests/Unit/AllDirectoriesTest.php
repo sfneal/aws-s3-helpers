@@ -12,7 +12,7 @@ class AllDirectoriesTest extends TestCase
         $this->assertNotNull($allDirectories);
         $this->assertIsArray($allDirectories);
 
-        foreach($expected as $expect) {
+        foreach ($expected as $expect) {
             $this->assertTrue(in_array($expect, $allDirectories));
         }
 
