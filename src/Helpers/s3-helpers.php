@@ -34,5 +34,5 @@ function s3FileUrlTemp(string $path, DateTimeInterface $expiration = null): stri
  */
 function s3Exists(string $s3_key): bool
 {
-    return Storage::disk('s3')->exists($s3_key);
+    return Storage::disk(config('filesystem.cloud', 's3'))->exists($s3_key);
 }
