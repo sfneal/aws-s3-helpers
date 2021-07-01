@@ -10,7 +10,6 @@ use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
 use Sfneal\Helpers\Aws\S3\Interfaces\S3Filesystem;
-use Sfneal\Helpers\Aws\S3\StorageS3;
 
 class S3 implements S3Filesystem
 {
@@ -140,36 +139,6 @@ class S3 implements S3Filesystem
         ];
 
         return Response::make($this->storageDisk()->get($this->s3Key), 200, $response);
-    }
-
-    /**
-     * List all of the files in an S3 directory.
-     *
-     * @return array
-     */
-    public function list(): array
-    {
-        $storage = $this->storageDisk();
-        $client = $storage->getAdapter()->getClient();
-        $command = $client->getCommand('ListObjects');
-        $command['Bucket'] = $storage->getAdapter()->getBucket();
-        $command['Prefix'] = $this->s3Key;
-        $result = $client->execute($command);
-
-        $files = [];
-        if (isset($result['Contents']) && ! empty($result['Contents'])) {
-            foreach ($result['Contents'] as $content) {
-                $url = StorageS3::key($content['Key'])->urlTemp();
-                $parts = explode('/', explode('?', $url, 2)[0]);
-                $files[] = [
-                    'name' => end($parts),
-                    'url' => $url,
-                    'key' => $content['Key'],
-                ];
-            }
-        }
-
-        return $files;
     }
 
     /**

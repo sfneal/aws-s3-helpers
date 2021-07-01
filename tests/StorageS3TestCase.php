@@ -2,7 +2,7 @@
 
 namespace Sfneal\Helpers\Aws\S3\Tests;
 
-class StorageS3TestCase extends TestCase
+abstract class StorageS3TestCase extends TestCase
 {
     /**
      * Retrieve an array of asset files.

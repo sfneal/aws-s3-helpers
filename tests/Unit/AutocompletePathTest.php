@@ -11,7 +11,7 @@ class AutocompletePathTest extends TestCase
     private function executeAssertions(string $expected, string $autocompleted)
     {
         $this->assertEquals($expected, $autocompleted);
-        $this->assertTrue(Storage::disk('s3')->exists($autocompleted));
+        $this->assertTrue(Storage::disk(config('filesystem.cloud', 's3'))->exists($autocompleted));
     }
 
     /** @test */

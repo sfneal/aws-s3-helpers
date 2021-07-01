@@ -1,23 +1,17 @@
 <?php
 
 use Illuminate\Support\Facades\Storage;
-use Sfneal\Helpers\Aws\S3\Utils\S3;
+use Sfneal\Helpers\Aws\S3\StorageS3;
 
 /**
  * Return either an S3 file url.
  *
  * @param string $path
- * @param bool $temp
- * @param DateTimeInterface|null $expiration
  * @return string
  */
-function s3FileURL(string $path, bool $temp = true, DateTimeInterface $expiration = null): string
+function s3FileURL(string $path): string
 {
-    if ($temp) {
-        return (new S3($path))->urlTemp($expiration);
-    } else {
-        return (new S3($path))->url();
-    }
+    return StorageS3::key($path)->url();
 }
 
 /**
@@ -29,7 +23,7 @@ function s3FileURL(string $path, bool $temp = true, DateTimeInterface $expiratio
  */
 function s3FileUrlTemp(string $path, DateTimeInterface $expiration = null): string
 {
-    return (new S3($path))->urlTemp($expiration);
+    return StorageS3::key($path)->urlTemp($expiration);
 }
 
 /**
@@ -40,5 +34,5 @@ function s3FileUrlTemp(string $path, DateTimeInterface $expiration = null): stri
  */
 function s3Exists(string $s3_key): bool
 {
-    return Storage::disk('s3')->exists($s3_key);
+    return Storage::disk(config('filesystem.cloud', 's3'))->exists($s3_key);
 }
