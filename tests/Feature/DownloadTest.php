@@ -1,6 +1,6 @@
 <?php
 
-namespace Sfneal\Helpers\Aws\S3\Tests\Unit;
+namespace Sfneal\Helpers\Aws\S3\Tests\Feature;
 
 use Illuminate\Http\Response;
 use Sfneal\Helpers\Aws\S3\StorageS3;

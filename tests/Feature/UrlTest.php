@@ -1,6 +1,6 @@
 <?php
 
-namespace Sfneal\Helpers\Aws\S3\Tests\Unit;
+namespace Sfneal\Helpers\Aws\S3\Tests\Feature;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
