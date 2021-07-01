@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Sfneal\Helpers\Aws\S3\Tests\Feature;
-
 
 use Sfneal\Helpers\Aws\S3\Interfaces\S3Filesystem;
 use Sfneal\Helpers\Aws\S3\Tests\TestCase;
