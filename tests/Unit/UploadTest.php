@@ -1,6 +1,6 @@
 <?php
 
-namespace Sfneal\Helpers\Aws\S3\Tests\Feature;
+namespace Sfneal\Helpers\Aws\S3\Tests\Unit;
 
 use Illuminate\Support\Facades\Storage;
 use Sfneal\Helpers\Aws\S3\StorageS3;
@@ -39,7 +39,7 @@ class UploadTest extends StorageS3TestCase
     public function file_can_be_uploaded()
     {
         $s3Key = StorageS3::key($this->uploadPath)
-            ->upload(__DIR__ . '/../Assets/' .$this->file)
+            ->upload(__DIR__.'/../Assets/'.$this->file)
             ->getKey();
 
         $exists = Storage::disk(config('filesystem.cloud', 's3'))->exists($s3Key);
@@ -56,7 +56,7 @@ class UploadTest extends StorageS3TestCase
     public function file_can_be_uploaded_raw()
     {
         $s3Key = StorageS3::key($this->uploadPath)
-            ->uploadRaw(file_get_contents(__DIR__ . '/../Assets/' .$this->file))
+            ->uploadRaw(file_get_contents(__DIR__.'/../Assets/'.$this->file))
             ->getKey();
 
         $exists = Storage::disk(config('filesystem.cloud', 's3'))->exists($s3Key);
