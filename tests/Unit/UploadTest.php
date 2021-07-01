@@ -46,6 +46,10 @@ class UploadTest extends StorageS3TestCase
 
         $this->assertIsBool($exists);
         $this->assertTrue($exists, "The file '{$this->file}' doesn't exist.");
+        $this->assertEquals(
+            Storage::size($this->uploadPath),
+            Storage::disk(config('filesystem.cloud', 's3'))->size($s3Key)
+        );
     }
 
     /** @test */
@@ -59,5 +63,9 @@ class UploadTest extends StorageS3TestCase
 
         $this->assertIsBool($exists);
         $this->assertTrue($exists, "The file '{$this->file}' doesn't exist.");
+        $this->assertEquals(
+            Storage::size($this->uploadPath),
+            Storage::disk(config('filesystem.cloud', 's3'))->size($s3Key)
+        );
     }
 }

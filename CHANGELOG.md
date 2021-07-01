@@ -91,3 +91,8 @@ All notable changes to `aws-s3-helpers` will be documented in this file
 - optimize `s3FileUrl()` helper method by removing $temp param
 - cut `S3::list()` method as it was behaving unexpectedly and is no longer used
 - fix use of `Storage::disk('s3')` with `Storage::disk(config('filesystem.cloud', 's3'))` to make use of config
+
+
+## 0.10.1 - 2021-07-01
+- add file content assertions to test suites to more accurately determine if the tests were successful
+- make `S3FilesystemTest`, `S3Test` & `StorageS3Test` tests for testing methods & interface implementations
