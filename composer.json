@@ -18,7 +18,7 @@
     "require": {
         "php": ">=7.4",
         "aws/aws-sdk-php": "^3.185",
-        "laravel/framework": ">=5.0",
+        "laravel/framework": ">=8.40",
         "league/flysystem-aws-s3-v3": ">=1.0.29"
     },
     "require-dev": {
