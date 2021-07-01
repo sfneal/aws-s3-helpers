@@ -10,7 +10,7 @@ class HelpersTest extends StorageS3TestCase
     /** @test */
     public function file_url_exists()
     {
-        $url = s3FileURL($this->file, false);
+        $url = s3FileURL($this->file);
 
         $this->assertNotNull($url);
         $this->assertIsString($url);
