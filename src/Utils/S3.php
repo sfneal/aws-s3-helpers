@@ -26,11 +26,11 @@ class S3 implements S3Filesystem
     /**
      * S3 constructor.
      *
-     * @param string $s3_key
+     * @param string $s3Key
      */
-    public function __construct(string $s3_key)
+    public function __construct(string $s3Key)
     {
-        $this->s3Key = $s3_key;
+        $this->s3Key = $s3Key;
         $this->disk = config('filesystem.cloud', 's3');
     }
 
