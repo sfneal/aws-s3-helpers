@@ -14,17 +14,6 @@ class UploadTest extends StorageS3TestCase
     private $uploadPath;
 
     /**
-     * Setup the test environment.
-     *
-     * @return void
-     */
-    protected function setUp(): void
-    {
-        $this->uploadPath = "uploaded_{$this->file}";
-        parent::setUp();
-    }
-
-    /**
      * Clean up the testing environment before the next test.
      *
      * @return void
@@ -35,34 +24,44 @@ class UploadTest extends StorageS3TestCase
         parent::tearDown();
     }
 
-    /** @test */
-    public function file_can_be_uploaded()
+    /**
+     * @test
+     * @dataProvider fileProvider
+     * @param string $file
+     */
+    public function file_can_be_uploaded(string $file)
     {
+        $this->uploadPath = "uploaded_{$file}";
         $s3Key = StorageS3::key($this->uploadPath)
-            ->upload(__DIR__.'/../Assets/'.$this->file)
+            ->upload(__DIR__.'/../Assets/'.$file)
             ->getKey();
 
         $exists = Storage::disk(config('filesystem.cloud', 's3'))->exists($s3Key);
 
         $this->assertIsBool($exists);
-        $this->assertTrue($exists, "The file '{$this->file}' doesn't exist.");
+        $this->assertTrue($exists, "The file '{$file}' doesn't exist.");
         $this->assertEquals(
             Storage::size($this->uploadPath),
             Storage::disk(config('filesystem.cloud', 's3'))->size($s3Key)
         );
     }
 
-    /** @test */
-    public function file_can_be_uploaded_raw()
+    /**
+     * @test
+     * @dataProvider fileProvider
+     * @param string $file
+     */
+    public function file_can_be_uploaded_raw(string $file)
     {
+        $this->uploadPath = "uploaded_{$file}";
         $s3Key = StorageS3::key($this->uploadPath)
-            ->uploadRaw(file_get_contents(__DIR__.'/../Assets/'.$this->file))
+            ->uploadRaw(file_get_contents(__DIR__.'/../Assets/'.$file))
             ->getKey();
 
         $exists = Storage::disk(config('filesystem.cloud', 's3'))->exists($s3Key);
 
         $this->assertIsBool($exists);
-        $this->assertTrue($exists, "The file '{$this->file}' doesn't exist.");
+        $this->assertTrue($exists, "The file '{$file}' doesn't exist.");
         $this->assertEquals(
             Storage::size($this->uploadPath),
             Storage::disk(config('filesystem.cloud', 's3'))->size($s3Key)

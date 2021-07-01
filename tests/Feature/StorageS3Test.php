@@ -20,21 +20,29 @@ class StorageS3Test extends StorageS3TestCase
         }
     }
 
-    /** @test */
-    public function key_method_return_s3_instance()
+    /**
+     * @test
+     * @dataProvider fileProvider
+     * @param string $file
+     */
+    public function key_method_return_s3_instance(string $file)
     {
         $this->assertInstanceOf(
             S3::class,
-            StorageS3::key($this->file)
+            StorageS3::key($file)
         );
     }
 
-    /** @test */
-    public function disk_method_return_s3_instance()
+    /**
+     * @test
+     * @dataProvider fileProvider
+     * @param string $file
+     */
+    public function disk_method_return_s3_instance(string $file)
     {
         $this->assertInstanceOf(
             S3::class,
-            StorageS3::disk(config('filesystems.cloud', 's3'), $this->file)
+            StorageS3::disk(config('filesystems.cloud', 's3'), $file)
         );
     }
 }
