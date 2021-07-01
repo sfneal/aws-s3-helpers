@@ -53,13 +53,6 @@ interface S3Filesystem
     public function download(string $fileName = null): Response;
 
     /**
-     * List all of the files in an S3 directory & return an array of files with constructed URLs.
-     *
-     * @return array
-     */
-    public function list(): array;
-
-    /**
      * Autocomplete an S3 path by providing the known start of a path.
      *
      * - once path autocompletion is resolved the $s3_key property is replaced with the found path
