@@ -8,18 +8,30 @@ use Sfneal\Helpers\Aws\S3\Tests\StorageS3TestCase;
 
 class DownloadTest extends StorageS3TestCase
 {
-    /** @test */
-    public function file_can_be_downloaded()
+    /**
+     * @test
+     * @dataProvider fileProvider
+     * @param string $file
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     * @throws \League\Flysystem\FileNotFoundException
+     */
+    public function file_can_be_downloaded(string $file)
     {
-        $storage = StorageS3::key($this->file);
+        $storage = StorageS3::key($file);
         $response = $storage->download();
 
         $this->assertInstanceOf(Response::class, $response);
         $this->assertEquals(file_get_contents($storage->url()), $response->content());
     }
 
-    /** @test */
-    public function file_download_headers_are_correct()
+    /**
+     * @test
+     * @dataProvider fileProvider
+     * @param string $file
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     * @throws \League\Flysystem\FileNotFoundException
+     */
+    public function file_download_headers_are_correct(string $file)
     {
         $expectedHeaderKeys = [
             'Content-Type',
@@ -28,7 +40,7 @@ class DownloadTest extends StorageS3TestCase
             'Content-Disposition',
             'Content-Transfer-Encoding',
         ];
-        $storage = StorageS3::key($this->file);
+        $storage = StorageS3::key($file);
         $response = $storage->download();
 
         foreach ($expectedHeaderKeys as $key) {
@@ -36,10 +48,16 @@ class DownloadTest extends StorageS3TestCase
         }
     }
 
-    /** @test */
-    public function file_download_response_code()
+    /**
+     * @test
+     * @dataProvider fileProvider
+     * @param string $file
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     * @throws \League\Flysystem\FileNotFoundException
+     */
+    public function file_download_response_code(string $file)
     {
-        $storage = StorageS3::key($this->file);
+        $storage = StorageS3::key($file);
         $response = $storage->download();
 
         $this->assertSame(200, $response->getStatusCode());

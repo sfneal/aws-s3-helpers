@@ -9,37 +9,14 @@ abstract class StorageS3TestCase extends TestCase
      *
      * @return array
      */
-    private static function files(): array
+    public function fileProvider(): array
     {
-        return array_diff(scandir(__DIR__.'/Assets'), ['.', '..']);
-    }
-
-    /**
-     * Retrieve a random asset file.
-     *
-     * @return string
-     */
-    public static function randomFile(): string
-    {
-        $files = self::files();
-        $file = array_rand($files);
-
-        return $files[$file];
-    }
-
-    /**
-     * @var string
-     */
-    protected $file;
-
-    /**
-     * Setup the test environment.
-     *
-     * @return void
-     */
-    protected function setUp(): void
-    {
-        $this->file = self::randomFile();
-        parent::setUp();
+        // Map files into arrays to be passed to test methods
+        return array_map(
+            function (string $file) {
+                return [$file];
+            },
+            array_diff(scandir(__DIR__.'/Assets'), ['.', '..'])
+        );
     }
 }

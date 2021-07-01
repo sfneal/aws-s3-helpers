@@ -12,11 +12,11 @@ class UrlTest extends StorageS3TestCase
     /**
      * @throws GuzzleException
      */
-    private function executeAssertions($url)
+    private function executeAssertions($url, $file)
     {
         $this->assertNotNull($url);
         $this->assertIsString($url);
-        $this->assertStringContainsString($this->file, $url);
+        $this->assertStringContainsString($file, $url);
 
         $response = (new Client())->request('get', $url);
 
@@ -24,20 +24,30 @@ class UrlTest extends StorageS3TestCase
         $this->assertEquals(file_get_contents($url), $response->getBody()->getContents());
     }
 
-    /** @test */
-    public function url_is_valid()
+    /**
+     * @test
+     * @dataProvider fileProvider
+     * @param string $file
+     * @throws GuzzleException
+     */
+    public function url_is_valid(string $file)
     {
-        $url = StorageS3::key($this->file)->url();
+        $url = StorageS3::key($file)->url();
 
-        $this->executeAssertions($url);
+        $this->executeAssertions($url, $file);
     }
 
-    /** @test */
-    public function temp_url_is_valid()
+    /**
+     * @test
+     * @dataProvider fileProvider
+     * @param string $file
+     * @throws GuzzleException
+     */
+    public function temp_url_is_valid(string $file)
     {
-        $url = StorageS3::key($this->file)->urlTemp();
+        $url = StorageS3::key($file)->urlTemp();
 
-        $this->executeAssertions($url);
-        $this->assertNotEquals(StorageS3::key($this->file)->url(), $url);
+        $this->executeAssertions($url, $file);
+        $this->assertNotEquals(StorageS3::key($file)->url(), $url);
     }
 }

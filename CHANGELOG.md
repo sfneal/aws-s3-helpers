@@ -96,3 +96,7 @@ All notable changes to `aws-s3-helpers` will be documented in this file
 ## 0.10.1 - 2021-07-01
 - add file content assertions to test suites to more accurately determine if the tests were successful
 - make `S3FilesystemTest`, `S3Test` & `StorageS3Test` tests for testing methods & interface implementations
+
+
+## 0.10.2 - 2021-07-01
+- add use of phpunit 'data providers' in order to run test methods on each test file (instead of a single random one)
