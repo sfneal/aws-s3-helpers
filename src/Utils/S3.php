@@ -123,18 +123,11 @@ class S3 implements S3Filesystem
      */
     public function download(string $fileName = null): \Illuminate\Http\Response
     {
-        if (is_null($fileName)) {
-            $fileName = basename($this->s3Key);
-        }
-
-        $mime = $this->storageDisk()->getMimetype($this->s3Key);
-        $size = $this->storageDisk()->getSize($this->s3Key);
-
         $response = [
-            'Content-Type' => $mime,
-            'Content-Length' => $size,
+            'Content-Type' => $this->storageDisk()->getMimetype($this->s3Key),
+            'Content-Length' => $this->storageDisk()->getSize($this->s3Key),
             'Content-Description' => 'File Transfer',
-            'Content-Disposition' => "attachment; filename={$fileName}",
+            'Content-Disposition' => "attachment; filename=".$fileName ?? basename($this->s3Key).'"',
             'Content-Transfer-Encoding' => 'binary',
         ];
 
