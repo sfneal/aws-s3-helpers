@@ -94,7 +94,7 @@ class S3 implements S3Filesystem
     }
 
     /**
-     * Upload a file to an S3 bucket.
+     * Upload a file to S3 using automatic streaming.
      *
      * @param string $localFilePath
      * @param string|null $acl
@@ -102,17 +102,14 @@ class S3 implements S3Filesystem
      */
     public function upload(string $localFilePath, string $acl = null): self
     {
-        // Use automatic file streaming if file is bigger than 1 MB
-        if ((filesize($localFilePath) / 1048576) >= 1) {
-            print_r([filesize($localFilePath) / 1048576, 'uploadStream']);
-            return $this->uploadStream($localFilePath, $acl);
-        }
+        $this->storageDisk()->putFileAs(
+            dirname($this->s3Key),
+            new File($localFilePath),
+            basename($this->s3Key),
+            $acl
+        );
 
-        // Use standard uploading
-        else {
-            print_r([filesize($localFilePath) / 1048576, 'uploadRaw']);
-            return $this->uploadRaw(fopen($localFilePath, 'r+'), $acl);
-        }
+        return $this;
     }
 
     /**
@@ -125,25 +122,6 @@ class S3 implements S3Filesystem
     public function uploadRaw($fileContents, string $acl = null): self
     {
         $this->storageDisk()->put($this->s3Key, $fileContents, $acl);
-
-        return $this;
-    }
-
-    /**
-     * Upload a file to S3 using automatic streaming.
-     *
-     * @param string $localFilePath
-     * @param string|null $acl
-     * @return self
-     */
-    public function uploadStream(string $localFilePath, string $acl = null): self
-    {
-        $this->storageDisk()->putFileAs(
-            dirname($this->s3Key),
-            new File($localFilePath),
-            basename($this->s3Key),
-            $acl
-        );
 
         return $this;
     }

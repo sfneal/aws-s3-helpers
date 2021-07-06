@@ -26,7 +26,7 @@ interface S3Filesystem
     public function urlTemp(DateTimeInterface $expiration = null): string;
 
     /**
-     * Upload a file to AWS S3.
+     * Upload a file to S3 using automatic streaming.
      *
      * @param string $localFilePath
      * @param string|null $acl
@@ -42,15 +42,6 @@ interface S3Filesystem
      * @return self
      */
     public function uploadRaw($fileContents, string $acl = null): self;
-
-    /**
-     * Upload a file to S3 using automatic streaming.
-     *
-     * @param string $localFilePath
-     * @param string|null $acl
-     * @return self
-     */
-    public function uploadStream(string $localFilePath, string $acl = null): self;
 
     /**
      * Download a file from AWS S3.
