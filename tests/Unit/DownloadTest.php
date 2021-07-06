@@ -3,6 +3,7 @@
 namespace Sfneal\Helpers\Aws\S3\Tests\Unit;
 
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Storage;
 use Sfneal\Helpers\Aws\S3\StorageS3;
 use Sfneal\Helpers\Aws\S3\Tests\StorageS3TestCase;
 
@@ -33,18 +34,21 @@ class DownloadTest extends StorageS3TestCase
      */
     public function file_download_headers_are_correct(string $file)
     {
+        $fileName = $fileName ?? basename($file);
+        $storage = Storage::disk(config('filesystem.cloud', 's3'));
         $expectedHeaderKeys = [
-            'Content-Type',
-            'Content-Length',
-            'Content-Description',
-            'Content-Disposition',
-            'Content-Transfer-Encoding',
+            'Content-Type' => $storage->getMimetype($file),
+            'Content-Length' => $storage->getSize($file),
+            'Content-Description' => 'File Transfer',
+            'Content-Disposition' => "attachment; filename={$fileName}",
+            'Content-Transfer-Encoding' => 'binary',
         ];
         $storage = StorageS3::key($file);
         $response = $storage->download();
 
-        foreach ($expectedHeaderKeys as $key) {
+        foreach ($expectedHeaderKeys as $key => $value) {
             $this->assertArrayHasKey(trim(strtolower($key)), $response->headers->all());
+            $this->assertEquals($value, $response->headers->get($key));
         }
     }
 

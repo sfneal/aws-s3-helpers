@@ -85,7 +85,10 @@ class S3 implements S3Filesystem
      */
     public function urlTemp(DateTimeInterface $expiration = null): string
     {
-        return $this->storageDisk()->temporaryUrl($this->s3Key, $expiration ?? now()->addMinutes(60));
+        return $this->storageDisk()->temporaryUrl(
+            $this->s3Key,
+            $expiration ?? config('s3-helpers.expiration')
+        );
     }
 
     /**
@@ -123,16 +126,10 @@ class S3 implements S3Filesystem
      */
     public function download(string $fileName = null): \Illuminate\Http\Response
     {
-        if (is_null($fileName)) {
-            $fileName = basename($this->s3Key);
-        }
-
-        $mime = $this->storageDisk()->getMimetype($this->s3Key);
-        $size = $this->storageDisk()->getSize($this->s3Key);
-
+        $fileName = $fileName ?? basename($this->s3Key);
         $response = [
-            'Content-Type' => $mime,
-            'Content-Length' => $size,
+            'Content-Type' => $this->storageDisk()->getMimetype($this->s3Key),
+            'Content-Length' => $this->storageDisk()->getSize($this->s3Key),
             'Content-Description' => 'File Transfer',
             'Content-Disposition' => "attachment; filename={$fileName}",
             'Content-Transfer-Encoding' => 'binary',

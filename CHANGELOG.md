@@ -101,3 +101,7 @@ All notable changes to `aws-s3-helpers` will be documented in this file
 ## 0.10.2 - 2021-07-01
 - add use of phpunit 'data providers' in order to run test methods on each test file (instead of a single random one)
 - bump min laravel/framework version to v8.40 to avoid security vulnerabilities & improve Travis CI runtime
+
+## 0.11.0 - 2021-07-06
+- make 's3-helpers' config file that's booted & registered from the `S3HelpersServiceProvider`
+- add 's3-helpers' config file with 'expiration' key for setting default temp url expirations
