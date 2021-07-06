@@ -2,7 +2,6 @@
 
 namespace Sfneal\Helpers\Aws\S3\Tests\Unit;
 
-use Illuminate\Support\Facades\Storage;
 use Sfneal\Helpers\Aws\S3\StorageS3;
 use Sfneal\Helpers\Aws\S3\Tests\UploadTestCase;
 
@@ -20,14 +19,7 @@ class UploadTest extends UploadTestCase
             ->upload(__DIR__.'/../Assets/'.$file)
             ->getKey();
 
-        $exists = Storage::disk(config('filesystem.cloud', 's3'))->exists($s3Key);
-
-        $this->assertIsBool($exists);
-        $this->assertTrue($exists, "The file '{$file}' doesn't exist.");
-        $this->assertEquals(
-            Storage::size($this->uploadPath),
-            Storage::disk(config('filesystem.cloud', 's3'))->size($s3Key)
-        );
+        $this->executeAssertions($file, $s3Key);
     }
 
     /**
@@ -42,13 +34,6 @@ class UploadTest extends UploadTestCase
             ->uploadRaw(file_get_contents(__DIR__.'/../Assets/'.$file))
             ->getKey();
 
-        $exists = Storage::disk(config('filesystem.cloud', 's3'))->exists($s3Key);
-
-        $this->assertIsBool($exists);
-        $this->assertTrue($exists, "The file '{$file}' doesn't exist.");
-        $this->assertEquals(
-            Storage::size($this->uploadPath),
-            Storage::disk(config('filesystem.cloud', 's3'))->size($s3Key)
-        );
+        $this->executeAssertions($file, $s3Key);
     }
 }
