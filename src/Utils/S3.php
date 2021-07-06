@@ -85,7 +85,10 @@ class S3 implements S3Filesystem
      */
     public function urlTemp(DateTimeInterface $expiration = null): string
     {
-        return $this->storageDisk()->temporaryUrl($this->s3Key, $expiration ?? now()->addMinutes(60));
+        return $this->storageDisk()->temporaryUrl(
+            $this->s3Key,
+            $expiration ?? config('s3-helpers.expiration')
+        );
     }
 
     /**

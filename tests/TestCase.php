@@ -6,10 +6,24 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Bootstrap\LoadEnvironmentVariables;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Orchestra\Testbench\TestCase as OrchestraTestCase;
+use Sfneal\Helpers\Aws\S3\Providers\S3HelpersServiceProvider;
 
 abstract class TestCase extends OrchestraTestCase
 {
     use RefreshDatabase;
+
+    /**
+     * Register package service providers®.
+     *
+     * @param Application $app
+     * @return array
+     */
+    protected function getPackageProviders($app): array
+    {
+        return [
+            S3HelpersServiceProvider::class,
+        ];
+    }
 
     /**
      * Define environment setup.
