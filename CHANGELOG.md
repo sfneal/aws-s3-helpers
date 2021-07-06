@@ -115,3 +115,7 @@ All notable changes to `aws-s3-helpers` will be documented in this file
 
 ## 0.11.2 - 2021-07-06
 - fix `S3::allFiles()` & `S3::allDirectories()` methods to return collections instead of arrays
+
+
+## 0.12.0 - 2021-07-06
+- optimize `S3::upload()` method to use automatic streaming to improve file upload times
