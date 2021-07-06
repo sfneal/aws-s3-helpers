@@ -4,26 +4,10 @@ namespace Sfneal\Helpers\Aws\S3\Tests\Unit;
 
 use Illuminate\Support\Facades\Storage;
 use Sfneal\Helpers\Aws\S3\StorageS3;
-use Sfneal\Helpers\Aws\S3\Tests\StorageS3TestCase;
+use Sfneal\Helpers\Aws\S3\Tests\UploadTestCase;
 
-class UploadTest extends StorageS3TestCase
+class UploadTest extends UploadTestCase
 {
-    /**
-     * @var string
-     */
-    private $uploadPath;
-
-    /**
-     * Clean up the testing environment before the next test.
-     *
-     * @return void
-     */
-    protected function tearDown(): void
-    {
-        Storage::delete($this->uploadPath);
-        parent::tearDown();
-    }
-
     /**
      * @test
      * @dataProvider fileProvider
