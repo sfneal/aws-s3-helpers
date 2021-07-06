@@ -7,6 +7,7 @@ use DateTimeInterface;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Filesystem\FilesystemAdapter;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
 use Sfneal\Helpers\Aws\S3\Interfaces\S3Filesystem;
@@ -168,16 +169,16 @@ class S3 implements S3Filesystem
      * Retrieve an array of all files in a directory with an optional filtering closure.
      *
      * @param Closure|null $closure
-     * @return array
+     * @return Collection
      */
-    public function allFiles(Closure $closure = null): array
+    public function allFiles(Closure $closure = null): Collection
     {
         // Create array of all files
-        $allFiles = $this->storageDisk()->allFiles($this->s3Key);
+        $allFiles = collect($this->storageDisk()->allFiles($this->s3Key));
 
         // Apply filtering closure
         if (isset($closure)) {
-            return array_filter(array_values($allFiles), $closure);
+            return $allFiles->filter($closure);
         }
 
         return $allFiles;
@@ -187,16 +188,16 @@ class S3 implements S3Filesystem
      * Retrieve an array of all directories within another directory with an optional filtering closure.
      *
      * @param Closure|null $closure
-     * @return array
+     * @return Collection
      */
-    public function allDirectories(Closure $closure = null): array
+    public function allDirectories(Closure $closure = null): Collection
     {
         // Create array of all directories
-        $allDirectories = $this->storageDisk()->allDirectories($this->s3Key);
+        $allDirectories = collect($this->storageDisk()->allDirectories($this->s3Key));
 
         // Apply filtering closure
         if (isset($closure)) {
-            return array_filter(array_values($allDirectories), $closure);
+            return $allDirectories->filter($closure);
         }
 
         return $allDirectories;
