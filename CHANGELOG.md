@@ -106,3 +106,8 @@ All notable changes to `aws-s3-helpers` will be documented in this file
 ## 0.11.0 - 2021-07-06
 - make 's3-helpers' config file that's booted & registered from the `S3HelpersServiceProvider`
 - add 's3-helpers' config file with 'expiration' key for setting default temp url expirations
+
+
+## 0.11.1 - 2021-07-06
+- fix issue with `S3HelpersServiceProvider` not being publishable
+- add test methods to `UrlTest` for testing expired temp urls
