@@ -111,3 +111,7 @@ All notable changes to `aws-s3-helpers` will be documented in this file
 ## 0.11.1 - 2021-07-06
 - fix issue with `S3HelpersServiceProvider` not being publishable
 - add test methods to `UrlTest` for testing expired temp urls
+
+
+## 0.11.2 - 2021-07-06
+- fix `S3::allFiles()` & `S3::allDirectories()` methods to return collections instead of arrays

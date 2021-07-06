@@ -2,6 +2,7 @@
 
 namespace Sfneal\Helpers\Aws\S3\Tests\Unit;
 
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 use Sfneal\Helpers\Aws\S3\StorageS3;
 use Sfneal\Helpers\Aws\S3\Tests\TestCase;
@@ -10,17 +11,20 @@ class AllFilesTest extends TestCase
 {
     private function executeAssertions($expected, $allFiles)
     {
+        $array = $allFiles->toArray();
+
         $this->assertNotNull($allFiles);
-        $this->assertIsArray($allFiles);
+        $this->assertInstanceOf(Collection::class, $allFiles);
+        $this->assertIsArray($array);
 
         foreach ($expected as $expect) {
-            $this->assertTrue(in_array($expect, $allFiles));
+            $this->assertTrue(in_array($expect, $array));
             Storage::disk(config('filesystem.cloud', 's3'))->exists($expect);
         }
 
         sort($expected);
-        sort($allFiles);
-        $this->assertEquals($expected, $allFiles);
+        sort($array);
+        $this->assertEquals($expected, $array);
     }
 
     /** @test */

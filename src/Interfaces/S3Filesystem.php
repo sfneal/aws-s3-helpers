@@ -6,6 +6,7 @@ use Closure;
 use DateTimeInterface;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\Response;
+use Illuminate\Support\Collection;
 
 interface S3Filesystem
 {
@@ -65,15 +66,15 @@ interface S3Filesystem
      * Retrieve an array of all files in a directory with an optional filtering closure.
      *
      * @param Closure|null $closure
-     * @return array
+     * @return Collection
      */
-    public function allFiles(Closure $closure = null): array;
+    public function allFiles(Closure $closure = null): Collection;
 
     /**
      * Retrieve an array of all directories within another directory with an optional filtering closure.
      *
      * @param Closure|null $closure
-     * @return array
+     * @return Collection
      */
-    public function allDirectories(Closure $closure = null): array;
+    public function allDirectories(Closure $closure = null): Collection;
 }
