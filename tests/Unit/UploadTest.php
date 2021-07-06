@@ -21,20 +21,7 @@ class UploadTest extends StorageS3TestCase
     protected function tearDown(): void
     {
         Storage::delete($this->uploadPath);
-
         parent::tearDown();
-    }
-
-    /**
-     * Setup the test environment.
-     *
-     * @return void
-     */
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->uploadPath = 'uploaded_'.uniqid().'_';
     }
 
     /**
@@ -62,7 +49,7 @@ class UploadTest extends StorageS3TestCase
      */
     public function file_can_be_uploaded(string $file)
     {
-        $this->uploadPath .= $file;
+        $this->uploadPath = "uploaded_{$file}";
         $s3Key = StorageS3::key($this->uploadPath)
             ->disableStreaming()
             ->upload(__DIR__.'/../Assets/'.$file)
@@ -78,7 +65,7 @@ class UploadTest extends StorageS3TestCase
      */
     public function file_can_be_uploaded_streamed(string $file)
     {
-        $this->uploadPath .= $file;
+        $this->uploadPath = "uploaded_{$file}";
         $s3Key = StorageS3::key($this->uploadPath)
             ->enableStreaming()
             ->upload(__DIR__.'/../Assets/'.$file)
@@ -94,7 +81,7 @@ class UploadTest extends StorageS3TestCase
      */
     public function file_can_be_uploaded_raw(string $file)
     {
-        $this->uploadPath .= $file;
+        $this->uploadPath = "uploaded_{$file}";
         $s3Key = StorageS3::key($this->uploadPath)
             ->uploadRaw(file_get_contents(__DIR__.'/../Assets/'.$file))
             ->getKey();
