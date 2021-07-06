@@ -7,6 +7,7 @@ use DateTimeInterface;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Filesystem\FilesystemAdapter;
+use Illuminate\Http\File;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
@@ -93,7 +94,7 @@ class S3 implements S3Filesystem
     }
 
     /**
-     * Upload a file to an S3 bucket.
+     * Upload a file to S3 using automatic streaming.
      *
      * @param string $localFilePath
      * @param string|null $acl
@@ -101,7 +102,14 @@ class S3 implements S3Filesystem
      */
     public function upload(string $localFilePath, string $acl = null): self
     {
-        return $this->uploadRaw(fopen($localFilePath, 'r+'), $acl);
+        $this->storageDisk()->putFileAs(
+            dirname($this->s3Key),
+            new File($localFilePath),
+            basename($this->s3Key),
+            $acl
+        );
+
+        return $this;
     }
 
     /**

@@ -11,7 +11,7 @@ class UploadTest extends StorageS3TestCase
     /**
      * @var string
      */
-    private $uploadPath;
+    protected $uploadPath;
 
     /**
      * Clean up the testing environment before the next test.
@@ -22,6 +22,24 @@ class UploadTest extends StorageS3TestCase
     {
         Storage::delete($this->uploadPath);
         parent::tearDown();
+    }
+
+    /**
+     * Execute upload test assertions.
+     *
+     * @param $file
+     * @param $s3Key
+     */
+    protected function executeAssertions($file, $s3Key)
+    {
+        $exists = Storage::disk(config('filesystem.cloud', 's3'))->exists($s3Key);
+
+        $this->assertIsBool($exists);
+        $this->assertTrue($exists, "The file '{$file}' doesn't exist.");
+        $this->assertEquals(
+            Storage::size($this->uploadPath),
+            Storage::disk(config('filesystem.cloud', 's3'))->size($s3Key)
+        );
     }
 
     /**
@@ -36,14 +54,7 @@ class UploadTest extends StorageS3TestCase
             ->upload(__DIR__.'/../Assets/'.$file)
             ->getKey();
 
-        $exists = Storage::disk(config('filesystem.cloud', 's3'))->exists($s3Key);
-
-        $this->assertIsBool($exists);
-        $this->assertTrue($exists, "The file '{$file}' doesn't exist.");
-        $this->assertEquals(
-            Storage::size($this->uploadPath),
-            Storage::disk(config('filesystem.cloud', 's3'))->size($s3Key)
-        );
+        $this->executeAssertions($file, $s3Key);
     }
 
     /**
@@ -58,13 +69,6 @@ class UploadTest extends StorageS3TestCase
             ->uploadRaw(file_get_contents(__DIR__.'/../Assets/'.$file))
             ->getKey();
 
-        $exists = Storage::disk(config('filesystem.cloud', 's3'))->exists($s3Key);
-
-        $this->assertIsBool($exists);
-        $this->assertTrue($exists, "The file '{$file}' doesn't exist.");
-        $this->assertEquals(
-            Storage::size($this->uploadPath),
-            Storage::disk(config('filesystem.cloud', 's3'))->size($s3Key)
-        );
+        $this->executeAssertions($file, $s3Key);
     }
 }

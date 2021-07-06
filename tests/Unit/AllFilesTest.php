@@ -33,12 +33,14 @@ class AllFilesTest extends TestCase
         $this->executeAssertions(
             [
                 'article.pdf',
+                'con-docs.pdf',
                 'charts.pdf',
                 'elevation.jpg',
                 'floor-plan.png',
                 'manual.pdf',
                 'workbook.pdf',
                 'directory/2021/20210002_second/article.pdf',
+                'directory/2021/20210002_second/con-docs.pdf',
                 'directory/2021/20210002_second/charts.pdf',
                 'directory/2021/20210002_second/elevation.jpg',
                 'directory/2021/20210002_second/floor-plan.png',
@@ -56,6 +58,7 @@ class AllFilesTest extends TestCase
             [
                 'directory/2021/20210002_second/article.pdf',
                 'directory/2021/20210002_second/charts.pdf',
+                'directory/2021/20210002_second/con-docs.pdf',
                 'directory/2021/20210002_second/elevation.jpg',
                 'directory/2021/20210002_second/floor-plan.png',
                 'directory/2021/20210002_second/manual.pdf',
