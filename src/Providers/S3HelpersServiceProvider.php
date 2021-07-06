@@ -7,7 +7,7 @@ use Illuminate\Support\ServiceProvider;
 class S3HelpersServiceProvider extends ServiceProvider
 {
     /**
-     * Bootstrap any CrudModelAction services.
+     * Bootstrap any AWS S3 Helper services.
      *
      * @return void
      */
@@ -20,7 +20,7 @@ class S3HelpersServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register any CrudModelAction services.
+     * Register any AWS S3 Helper services.
      *
      * @return void
      */

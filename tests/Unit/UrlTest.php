@@ -50,4 +50,41 @@ class UrlTest extends StorageS3TestCase
         $this->executeAssertions($url, $file);
         $this->assertNotEquals(StorageS3::key($file)->url(), $url);
     }
+
+    /**
+     * @test
+     * @dataProvider fileProvider
+     * @param string $file
+     */
+    public function temp_url_with_after_expiration_is_invalid(string $file)
+    {
+        $url = StorageS3::key($file)->urlTemp(now()->addSecond());
+
+        sleep(1);
+        try {
+            $response = (new Client())->request('get', $url);
+            $this->assertEquals(403, $response->getStatusCode());
+        } catch (GuzzleException $exception) {
+            $this->assertInstanceOf(GuzzleException::class, $exception);
+            $this->assertEquals(403, $exception->getCode());
+        }
+    }
+
+    /**
+     * @test
+     * @dataProvider fileProvider
+     * @param string $file
+     */
+    public function temp_url_expired_is_invalid(string $file)
+    {
+        $url = StorageS3::key($file)->urlTemp(now()->subMinute());
+
+        try {
+            $response = (new Client())->request('get', $url);
+            $this->assertEquals(400, $response->getStatusCode());
+        } catch (GuzzleException $exception) {
+            $this->assertInstanceOf(GuzzleException::class, $exception);
+            $this->assertEquals(400, $exception->getCode());
+        }
+    }
 }
