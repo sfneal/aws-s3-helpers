@@ -2,11 +2,46 @@
 
 namespace Sfneal\Helpers\Aws\S3\Tests\Unit;
 
+use Illuminate\Support\Facades\Storage;
 use Sfneal\Helpers\Aws\S3\StorageS3;
-use Sfneal\Helpers\Aws\S3\Tests\UploadTestCase;
+use Sfneal\Helpers\Aws\S3\Tests\StorageS3TestCase;
 
-class UploadTest extends UploadTestCase
+class UploadTest extends StorageS3TestCase
 {
+    /**
+     * @var string
+     */
+    protected $uploadPath;
+
+    /**
+     * Clean up the testing environment before the next test.
+     *
+     * @return void
+     */
+    protected function tearDown(): void
+    {
+        Storage::delete($this->uploadPath);
+        parent::tearDown();
+    }
+
+    /**
+     * Execute upload test assertions.
+     *
+     * @param $file
+     * @param $s3Key
+     */
+    protected function executeAssertions($file, $s3Key)
+    {
+        $exists = Storage::disk(config('filesystem.cloud', 's3'))->exists($s3Key);
+
+        $this->assertIsBool($exists);
+        $this->assertTrue($exists, "The file '{$file}' doesn't exist.");
+        $this->assertEquals(
+            Storage::size($this->uploadPath),
+            Storage::disk(config('filesystem.cloud', 's3'))->size($s3Key)
+        );
+    }
+
     /**
      * @test
      * @dataProvider fileProvider
