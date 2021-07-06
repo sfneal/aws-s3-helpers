@@ -71,4 +71,19 @@ class UploadTest extends StorageS3TestCase
 
         $this->executeAssertions($file, $s3Key);
     }
+
+    /**
+     * @test
+     * @dataProvider fileProvider
+     * @param string $file
+     */
+    public function file_can_be_uploaded_streamed(string $file)
+    {
+        $this->uploadPath = "uploaded_{$file}";
+        $s3Key = StorageS3::key($this->uploadPath)
+            ->uploadStream(__DIR__.'/../Assets/'.$file)
+            ->getKey();
+
+        $this->executeAssertions($file, $s3Key);
+    }
 }

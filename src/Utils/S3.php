@@ -7,6 +7,7 @@ use DateTimeInterface;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Filesystem\FilesystemAdapter;
+use Illuminate\Http\File;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
@@ -101,7 +102,17 @@ class S3 implements S3Filesystem
      */
     public function upload(string $localFilePath, string $acl = null): self
     {
-        return $this->uploadRaw(fopen($localFilePath, 'r+'), $acl);
+        // Use automatic file streaming if file is bigger than 1 MB
+        if ((filesize($localFilePath) / 1048576) >= 1) {
+            print_r([filesize($localFilePath) / 1048576, 'uploadStream']);
+            return $this->uploadStream($localFilePath, $acl);
+        }
+
+        // Use standard uploading
+        else {
+            print_r([filesize($localFilePath) / 1048576, 'uploadRaw']);
+            return $this->uploadRaw(fopen($localFilePath, 'r+'), $acl);
+        }
     }
 
     /**
@@ -114,6 +125,25 @@ class S3 implements S3Filesystem
     public function uploadRaw($fileContents, string $acl = null): self
     {
         $this->storageDisk()->put($this->s3Key, $fileContents, $acl);
+
+        return $this;
+    }
+
+    /**
+     * Upload a file to S3 using automatic streaming.
+     *
+     * @param string $localFilePath
+     * @param string|null $acl
+     * @return self
+     */
+    public function uploadStream(string $localFilePath, string $acl = null): self
+    {
+        $this->storageDisk()->putFileAs(
+            dirname($this->s3Key),
+            new File($localFilePath),
+            basename($this->s3Key),
+            $acl
+        );
 
         return $this;
     }
