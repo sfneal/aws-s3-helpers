@@ -42,7 +42,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Sfneal\\Helpers\\AWS\\S3\\Providers\\S3HelpersServiceProvider"
+                "Sfneal\\Helpers\\Aws\\S3\\Providers\\S3HelpersServiceProvider"
             ]
         }
     },
