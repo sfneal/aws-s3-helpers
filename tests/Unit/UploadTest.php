@@ -34,7 +34,7 @@ class UploadTest extends StorageS3TestCase
     {
         parent::setUp();
 
-        $this->uploadPath = 'uploaded_' . uniqid() . '_';
+        $this->uploadPath = 'uploaded_'.uniqid().'_';
     }
 
     /**
