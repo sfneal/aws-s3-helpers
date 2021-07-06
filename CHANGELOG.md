@@ -119,4 +119,10 @@ All notable changes to `aws-s3-helpers` will be documented in this file
 
 ## 0.12.0 - 2021-07-06
 - optimize `S3::upload()` method by adding use of automatic file streaming to improve upload times & reduce memory usage
-- add large (7 MB) 'con-docs.pdf' test file for testing upload streaming performance 
+- add large (7 MB) 'con-docs.pdf' test file for testing upload streaming performance
+
+
+## 0.12.1 - 2021-07-06
+- add 'streaming' config key for enabling/disable file streaming
+- add check to `S3::upload()` method to confirm streaming was enabled
+- add `file_can_be_uploaded_streamed()` test method to `UploadTest` for testing streaming 

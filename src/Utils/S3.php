@@ -16,14 +16,19 @@ use Sfneal\Helpers\Aws\S3\Interfaces\S3Filesystem;
 class S3 implements S3Filesystem
 {
     /**
-     * @var string
+     * @var string AWS S3 file key
      */
     private $s3Key;
 
     /**
-     * @var string
+     * @var string Storage S3 cloud disk name
      */
     private $disk;
+
+    /**
+     * @var bool Enable/disable upload & download streaming
+     */
+    private $streaming;
 
     /**
      * S3 constructor.
@@ -34,6 +39,7 @@ class S3 implements S3Filesystem
     {
         $this->s3Key = $s3Key;
         $this->disk = config('filesystem.cloud', 's3');
+        $this->streaming = config('s3-helpers.streaming', true);
     }
 
     /**
@@ -65,6 +71,30 @@ class S3 implements S3Filesystem
     public function setDisk(string $disk): self
     {
         $this->disk = $disk;
+
+        return $this;
+    }
+
+    /**
+     * Enable upload/download streaming regardless of config setting.
+     *
+     * @return $this
+     */
+    public function enableStreaming(): self
+    {
+        $this->streaming = true;
+
+        return $this;
+    }
+
+    /**
+     * Disable upload/download streaming regardless of config setting.
+     *
+     * @return $this
+     */
+    public function disableStreaming(): self
+    {
+        $this->streaming = false;
 
         return $this;
     }
@@ -102,14 +132,22 @@ class S3 implements S3Filesystem
      */
     public function upload(string $localFilePath, string $acl = null): self
     {
-        $this->storageDisk()->putFileAs(
-            dirname($this->s3Key),
-            new File($localFilePath),
-            basename($this->s3Key),
-            $acl
-        );
+        // Use streaming for improved performance if enabled
+        if ($this->streaming) {
+            $this->storageDisk()->putFileAs(
+                dirname($this->s3Key),
+                new File($localFilePath),
+                basename($this->s3Key),
+                $acl
+            );
 
-        return $this;
+            return $this;
+        }
+
+        // Use standard file uploading
+        else {
+            return $this->uploadRaw(fopen($localFilePath, 'r+'), $acl);
+        }
     }
 
     /**
