@@ -5,100 +5,13 @@ namespace Sfneal\Helpers\Aws\S3\Utils;
 use Closure;
 use DateTimeInterface;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
-use Illuminate\Contracts\Filesystem\Filesystem;
-use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Http\File;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Response;
-use Illuminate\Support\Facades\Storage;
 use Sfneal\Helpers\Aws\S3\Interfaces\S3Filesystem;
 
-class S3 implements S3Filesystem
+class S3 extends CloudStorage implements S3Filesystem
 {
-    /**
-     * @var string AWS S3 file key
-     */
-    private $s3Key;
-
-    /**
-     * @var string Storage S3 cloud disk name
-     */
-    private $disk;
-
-    /**
-     * @var bool Enable/disable upload & download streaming
-     */
-    private $streaming;
-
-    /**
-     * S3 constructor.
-     *
-     * @param string $s3Key
-     */
-    public function __construct(string $s3Key)
-    {
-        $this->s3Key = $s3Key;
-        $this->disk = config('filesystem.cloud', 's3');
-        $this->streaming = config('s3-helpers.streaming', true);
-    }
-
-    /**
-     * Retrieve a Filesystem instance for the specified disk.
-     *
-     * @return Filesystem|FilesystemAdapter
-     */
-    private function storageDisk(): FilesystemAdapter
-    {
-        return Storage::disk($this->disk);
-    }
-
-    /**
-     * Retrieve the S3 key (useful in conjunctions with `autocompletePath()` method).
-     *
-     * @return string
-     */
-    public function getKey(): string
-    {
-        return $this->s3Key;
-    }
-
-    /**
-     * Set the filesystem disk.
-     *
-     * @param string $disk
-     * @return $this
-     */
-    public function setDisk(string $disk): self
-    {
-        $this->disk = $disk;
-
-        return $this;
-    }
-
-    /**
-     * Enable upload/download streaming regardless of config setting.
-     *
-     * @return $this
-     */
-    public function enableStreaming(): self
-    {
-        $this->streaming = true;
-
-        return $this;
-    }
-
-    /**
-     * Disable upload/download streaming regardless of config setting.
-     *
-     * @return $this
-     */
-    public function disableStreaming(): self
-    {
-        $this->streaming = false;
-
-        return $this;
-    }
-
     /**
      * Return either an S3 file url.
      *
@@ -124,7 +37,7 @@ class S3 implements S3Filesystem
     }
 
     /**
-     * Upload a file to S3 using automatic streaming.
+     * Upload a file to S3 using automatic streaming or raw file uploading.
      *
      * @param string $localFilePath
      * @param string|null $acl
@@ -133,15 +46,8 @@ class S3 implements S3Filesystem
     public function upload(string $localFilePath, string $acl = null): self
     {
         // Use streaming for improved performance if enabled
-        if ($this->streaming) {
-            $this->storageDisk()->putFileAs(
-                dirname($this->s3Key),
-                new File($localFilePath),
-                basename($this->s3Key),
-                $acl
-            );
-
-            return $this;
+        if ($this->isStreamingEnabled()) {
+            return $this->uploadStream($localFilePath, $acl);
         }
 
         // Use standard file uploading
@@ -160,6 +66,25 @@ class S3 implements S3Filesystem
     public function uploadRaw($fileContents, string $acl = null): self
     {
         $this->storageDisk()->put($this->s3Key, $fileContents, $acl);
+
+        return $this;
+    }
+
+    /**
+     * Upload a file to S3 using automatic streaming.
+     *
+     * @param string $localFilePath
+     * @param string|null $acl
+     * @return $this
+     */
+    protected function uploadStream(string $localFilePath, string $acl = null): self
+    {
+        $this->storageDisk()->putFileAs(
+            dirname($this->s3Key),
+            new File($localFilePath),
+            basename($this->s3Key),
+            $acl
+        );
 
         return $this;
     }
