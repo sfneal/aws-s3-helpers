@@ -26,6 +26,11 @@ class CloudStorage
     protected $streaming;
 
     /**
+     * @var bool Enable/disable deleting the local file after it's been uploaded
+     */
+    protected $deleteLocalFileAfterUpload = false;
+
+    /**
      * S3 constructor.
      *
      * @param string $s3Key
@@ -55,6 +60,28 @@ class CloudStorage
     protected function isStreamingEnabled(): bool
     {
         return $this->streaming;
+    }
+
+    /**
+     * Determine if deleting the local file after it's been uploaded is enabled.
+     *
+     * @return bool
+     */
+    private function isLocalFileDeletingEnabled(): bool
+    {
+        return $this->deleteLocalFileAfterUpload;
+    }
+
+    /**
+     * Delete the local file path if post upload file deletion is enabled.
+     *
+     * @param string $localFilePath
+     */
+    protected function deleteLocalFileIfEnabled(string $localFilePath): void
+    {
+        if ($this->isLocalFileDeletingEnabled()) {
+            unlink($localFilePath);
+        }
     }
 
     /**
@@ -100,6 +127,18 @@ class CloudStorage
     public function disableStreaming(): self
     {
         $this->streaming = false;
+
+        return $this;
+    }
+
+    /**
+     * Enable deleting the local file after it's been uploaded.
+     *
+     * @return $this
+     */
+    public function enableDeleteLocalFileAfterUpload(): self
+    {
+        $this->deleteLocalFileAfterUpload = true;
 
         return $this;
     }
