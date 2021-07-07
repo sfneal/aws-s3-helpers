@@ -126,3 +126,7 @@ All notable changes to `aws-s3-helpers` will be documented in this file
 - add 'streaming' config key for enabling/disable file streaming
 - add check to `S3::upload()` method to confirm streaming was enabled
 - add `file_can_be_uploaded_streamed()` test method to `UploadTest` for testing streaming
+
+
+## 0.12.2 - 2021-07-07
+- make `CloudStorage` util class for housing properties, getters & setters
