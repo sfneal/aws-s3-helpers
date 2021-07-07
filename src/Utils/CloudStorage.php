@@ -7,9 +7,14 @@ namespace Sfneal\Helpers\Aws\S3\Utils;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Support\Facades\Storage;
+use Sfneal\Helpers\Aws\S3\Utils\Traits\LocalFileDeletion;
+use Sfneal\Helpers\Aws\S3\Utils\Traits\UploadStreaming;
 
 class CloudStorage
 {
+    use LocalFileDeletion;
+    use UploadStreaming;
+
     /**
      * @var string AWS S3 file key
      */
@@ -21,16 +26,6 @@ class CloudStorage
     protected $disk;
 
     /**
-     * @var bool Enable/disable upload & download streaming
-     */
-    protected $streaming;
-
-    /**
-     * @var bool Enable/disable deleting the local file after it's been uploaded
-     */
-    protected $deleteLocalFileAfterUpload = false;
-
-    /**
      * S3 constructor.
      *
      * @param string $s3Key
@@ -40,48 +35,6 @@ class CloudStorage
         $this->s3Key = $s3Key;
         $this->disk = config('filesystem.cloud', 's3');
         $this->streaming = config('s3-helpers.streaming', true);
-    }
-
-    /**
-     * Retrieve a Filesystem instance for the specified disk.
-     *
-     * @return Filesystem|FilesystemAdapter
-     */
-    protected function storageDisk(): FilesystemAdapter
-    {
-        return Storage::disk($this->disk);
-    }
-
-    /**
-     * Determine if upload/download streaming is enabled.
-     *
-     * @return bool
-     */
-    protected function isStreamingEnabled(): bool
-    {
-        return $this->streaming;
-    }
-
-    /**
-     * Determine if deleting the local file after it's been uploaded is enabled.
-     *
-     * @return bool
-     */
-    private function isLocalFileDeletingEnabled(): bool
-    {
-        return $this->deleteLocalFileAfterUpload;
-    }
-
-    /**
-     * Delete the local file path if post upload file deletion is enabled.
-     *
-     * @param string $localFilePath
-     */
-    protected function deleteLocalFileIfEnabled(string $localFilePath): void
-    {
-        if ($this->isLocalFileDeletingEnabled()) {
-            unlink($localFilePath);
-        }
     }
 
     /**
@@ -108,38 +61,12 @@ class CloudStorage
     }
 
     /**
-     * Enable upload/download streaming regardless of config setting.
+     * Retrieve a Filesystem instance for the specified disk.
      *
-     * @return $this
+     * @return Filesystem|FilesystemAdapter
      */
-    public function enableStreaming(): self
+    protected function storageDisk(): FilesystemAdapter
     {
-        $this->streaming = true;
-
-        return $this;
-    }
-
-    /**
-     * Disable upload/download streaming regardless of config setting.
-     *
-     * @return $this
-     */
-    public function disableStreaming(): self
-    {
-        $this->streaming = false;
-
-        return $this;
-    }
-
-    /**
-     * Enable deleting the local file after it's been uploaded.
-     *
-     * @return $this
-     */
-    public function enableDeleteLocalFileAfterUpload(): self
-    {
-        $this->deleteLocalFileAfterUpload = true;
-
-        return $this;
+        return Storage::disk($this->disk);
     }
 }
