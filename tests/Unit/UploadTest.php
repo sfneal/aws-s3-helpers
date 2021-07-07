@@ -88,4 +88,52 @@ class UploadTest extends StorageS3TestCase
 
         $this->executeAssertions($file, $s3Key);
     }
+
+    /**
+     * @test
+     * @dataProvider fileProvider
+     * @param string $file
+     */
+    public function file_can_be_uploaded_and_local_file_deleted(string $file)
+    {
+        $tempFile = "temp_{$file}";
+        $this->assertTrue(copy(__DIR__.'/../Assets/'.$file, __DIR__.'/../Assets/'.$tempFile));
+
+        $localPath = __DIR__.'/../Assets/'.$tempFile;
+        $this->uploadPath = "uploaded_{$tempFile}";
+        $this->assertTrue(file_exists($localPath));
+
+        $s3Key = StorageS3::key($this->uploadPath)
+            ->disableStreaming()
+            ->deleteLocalFileAfterUpload()
+            ->upload($localPath)
+            ->getKey();
+
+        $this->executeAssertions($file, $s3Key);
+        $this->assertFalse(file_exists($localPath));
+    }
+
+    /**
+     * @test
+     * @dataProvider fileProvider
+     * @param string $file
+     */
+    public function file_can_be_uploaded_and_local_file_deleted_with_streaming(string $file)
+    {
+        $tempFile = "temp_{$file}";
+        $this->assertTrue(copy(__DIR__.'/../Assets/'.$file, __DIR__.'/../Assets/'.$tempFile));
+
+        $localPath = __DIR__.'/../Assets/'.$tempFile;
+        $this->uploadPath = "uploaded_{$tempFile}";
+        $this->assertTrue(file_exists($localPath));
+
+        $s3Key = StorageS3::key($this->uploadPath)
+            ->enableStreaming()
+            ->deleteLocalFileAfterUpload()
+            ->upload($localPath)
+            ->getKey();
+
+        $this->executeAssertions($file, $s3Key);
+        $this->assertFalse(file_exists($localPath));
+    }
 }
