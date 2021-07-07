@@ -99,15 +99,18 @@ class S3 extends CloudStorage implements S3Filesystem
     public function download(string $fileName = null): \Illuminate\Http\Response
     {
         $fileName = $fileName ?? basename($this->s3Key);
-        $response = [
-            'Content-Type' => $this->storageDisk()->getMimetype($this->s3Key),
-            'Content-Length' => $this->storageDisk()->getSize($this->s3Key),
-            'Content-Description' => 'File Transfer',
-            'Content-Disposition' => "attachment; filename={$fileName}",
-            'Content-Transfer-Encoding' => 'binary',
-        ];
 
-        return Response::make($this->storageDisk()->get($this->s3Key), 200, $response);
+        return Response::make(
+            $this->storageDisk()->get($this->s3Key),
+            200,
+            [
+                'Content-Type' => $this->storageDisk()->getMimetype($this->s3Key),
+                'Content-Length' => $this->storageDisk()->getSize($this->s3Key),
+                'Content-Description' => 'File Transfer',
+                'Content-Disposition' => "attachment; filename={$fileName}",
+                'Content-Transfer-Encoding' => 'binary',
+            ]
+        );
     }
 
     /**
