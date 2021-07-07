@@ -42,6 +42,6 @@ trait UploadStreaming
      */
     protected function isStreamingEnabled(): bool
     {
-        return $this->streaming;
+        return $this->streaming ?? config('s3-helpers.streaming', true);
     }
 }

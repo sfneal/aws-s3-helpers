@@ -34,7 +34,6 @@ class CloudStorage
     {
         $this->s3Key = $s3Key;
         $this->disk = config('filesystem.cloud', 's3');
-        $this->streaming = config('s3-helpers.streaming', true);
     }
 
     /**
