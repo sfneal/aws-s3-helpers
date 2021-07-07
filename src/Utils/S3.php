@@ -47,13 +47,18 @@ class S3 extends CloudStorage implements S3Filesystem
     {
         // Use streaming for improved performance if enabled
         if ($this->isStreamingEnabled()) {
-            return $this->uploadStream($localFilePath, $acl);
+            $this->uploadStream($localFilePath, $acl);
         }
 
         // Use standard file uploading
         else {
-            return $this->uploadRaw(fopen($localFilePath, 'r+'), $acl);
+            $this->uploadRaw(fopen($localFilePath, 'r+'), $acl);
         }
+
+        // Conditionally delete the local file
+        $this->deleteLocalFileIfEnabled($localFilePath);
+
+        return $this;
     }
 
     /**
@@ -79,6 +84,7 @@ class S3 extends CloudStorage implements S3Filesystem
      */
     protected function uploadStream(string $localFilePath, string $acl = null): self
     {
+        // Upload the file
         $this->storageDisk()->putFileAs(
             dirname($this->s3Key),
             new File($localFilePath),

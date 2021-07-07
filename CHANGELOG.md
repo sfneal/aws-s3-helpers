@@ -130,3 +130,9 @@ All notable changes to `aws-s3-helpers` will be documented in this file
 
 ## 0.12.2 - 2021-07-07
 - make `CloudStorage` util class for housing properties, getters & setters
+
+
+## 0.13.0 - 2021-07-07
+- add ability to delete a local file after it's been uploaded
+- fix issues with `UploadTest::executeAssertions()` method not comparing local & cloud files
+- add test methods to `UploadTest` for testing deleting local files (w/streaming enabled & disabled)
