@@ -126,4 +126,3 @@ All notable changes to `aws-s3-helpers` will be documented in this file
 - add 'streaming' config key for enabling/disable file streaming
 - add check to `S3::upload()` method to confirm streaming was enabled
 - add `file_can_be_uploaded_streamed()` test method to `UploadTest` for testing streaming
-- add unique id to upload file paths to avoid conflicts when running multiple tests at once
