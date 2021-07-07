@@ -16,7 +16,7 @@ trait LocalFileDeletion
      *
      * @return $this
      */
-    public function enableDeleteLocalFileAfterUpload(): self
+    public function deleteLocalFileAfterUpload(): self
     {
         $this->deleteLocalFileAfterUpload = true;
 
