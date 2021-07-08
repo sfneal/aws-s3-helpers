@@ -142,3 +142,7 @@ All notable changes to `aws-s3-helpers` will be documented in this file
 - refactor interfaces so that 'accessors' & 'actions' are implemented separately
 - make test classes for testing interfaces
 - add sfneal/mock-models to composer requirements to support use of the new `InterfaceTest` trait
+
+
+## 0.13.2 - 2021-07-08
+- refactor `CloudStorage` so that $disk is now a constructor param instead of requiring a call to a setter method

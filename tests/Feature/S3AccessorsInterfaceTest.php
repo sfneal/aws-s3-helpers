@@ -42,7 +42,6 @@ class S3AccessorsInterfaceTest extends TestCase
     {
         return [
             'getKey',
-            'setDisk',
             'url',
             'urlTemp',
         ];

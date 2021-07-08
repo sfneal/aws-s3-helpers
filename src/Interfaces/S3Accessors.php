@@ -14,14 +14,6 @@ interface S3Accessors
     public function getKey(): string;
 
     /**
-     * Set the filesystem disk.
-     *
-     * @param string $disk
-     * @return $this
-     */
-    public function setDisk(string $disk): self;
-
-    /**
      * Return an S3 file url.
      *
      * @return string

@@ -52,7 +52,7 @@ class S3 extends CloudStorage implements S3Actions
     {
         $this->storageDisk()->put($this->s3Key, $fileContents, $acl);
 
-        return (new CloudStorage($this->s3Key))->setDisk($this->disk);
+        return new CloudStorage($this->s3Key, $this->disk);
     }
 
     /**
@@ -72,7 +72,7 @@ class S3 extends CloudStorage implements S3Actions
             $acl
         );
 
-        return (new CloudStorage($this->s3Key))->setDisk($this->disk);
+        return new CloudStorage($this->s3Key, $this->disk);
     }
 
     /**
