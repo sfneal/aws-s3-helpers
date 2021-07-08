@@ -7,14 +7,9 @@ use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Support\Facades\Storage;
 use Sfneal\Helpers\Aws\S3\Interfaces\S3Accessors;
-use Sfneal\Helpers\Aws\S3\Utils\Traits\LocalFileDeletion;
-use Sfneal\Helpers\Aws\S3\Utils\Traits\UploadStreaming;
 
 class CloudStorage implements S3Accessors
 {
-    use LocalFileDeletion;
-    use UploadStreaming;
-
     /**
      * @var string AWS S3 file key
      */

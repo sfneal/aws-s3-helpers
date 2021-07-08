@@ -8,9 +8,14 @@ use Illuminate\Http\File;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Response;
 use Sfneal\Helpers\Aws\S3\Interfaces\S3Actions;
+use Sfneal\Helpers\Aws\S3\Utils\Traits\LocalFileDeletion;
+use Sfneal\Helpers\Aws\S3\Utils\Traits\UploadStreaming;
 
 class S3 extends CloudStorage implements S3Actions
 {
+    use LocalFileDeletion;
+    use UploadStreaming;
+
     /**
      * Upload a file to S3 using automatic streaming or raw file uploading.
      *
