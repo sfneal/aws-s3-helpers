@@ -7,33 +7,38 @@ use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\File;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Response;
-use Sfneal\Helpers\Aws\S3\Interfaces\S3Actions;
+use Sfneal\Helpers\Aws\S3\Utils\Interfaces\S3Actions;
+use Sfneal\Helpers\Aws\S3\Utils\Traits\LocalFileDeletion;
+use Sfneal\Helpers\Aws\S3\Utils\Traits\UploadStreaming;
 
 class S3 extends CloudStorage implements S3Actions
 {
+    use LocalFileDeletion;
+    use UploadStreaming;
+
     /**
      * Upload a file to S3 using automatic streaming or raw file uploading.
      *
      * @param string $localFilePath
      * @param string|null $acl
-     * @return self
+     * @return CloudStorage
      */
-    public function upload(string $localFilePath, string $acl = null): self
+    public function upload(string $localFilePath, string $acl = null): CloudStorage
     {
         // Use streaming for improved performance if enabled
         if ($this->isStreamingEnabled()) {
-            $this->uploadStream($localFilePath, $acl);
+            $cloudStorage = $this->uploadStream($localFilePath, $acl);
         }
 
         // Use standard file uploading
         else {
-            $this->uploadRaw(fopen($localFilePath, 'r+'), $acl);
+            $cloudStorage = $this->uploadRaw(fopen($localFilePath, 'r+'), $acl);
         }
 
         // Conditionally delete the local file
         $this->deleteLocalFileIfEnabled($localFilePath);
 
-        return $this;
+        return $cloudStorage;
     }
 
     /**
@@ -41,13 +46,13 @@ class S3 extends CloudStorage implements S3Actions
      *
      * @param $fileContents
      * @param string|null $acl
-     * @return self
+     * @return CloudStorage
      */
-    public function uploadRaw($fileContents, string $acl = null): self
+    public function uploadRaw($fileContents, string $acl = null): CloudStorage
     {
         $this->storageDisk()->put($this->s3Key, $fileContents, $acl);
 
-        return $this;
+        return new CloudStorage($this->s3Key, $this->disk);
     }
 
     /**
@@ -55,9 +60,9 @@ class S3 extends CloudStorage implements S3Actions
      *
      * @param string $localFilePath
      * @param string|null $acl
-     * @return $this
+     * @return CloudStorage
      */
-    protected function uploadStream(string $localFilePath, string $acl = null): self
+    protected function uploadStream(string $localFilePath, string $acl = null): CloudStorage
     {
         // Upload the file
         $this->storageDisk()->putFileAs(
@@ -67,7 +72,7 @@ class S3 extends CloudStorage implements S3Actions
             $acl
         );
 
-        return $this;
+        return new CloudStorage($this->s3Key, $this->disk);
     }
 
     /**

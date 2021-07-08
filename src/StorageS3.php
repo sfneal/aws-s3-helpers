@@ -26,6 +26,6 @@ class StorageS3
      */
     public static function disk(string $disk, string $key): S3
     {
-        return self::key($key)->setDisk($disk);
+        return new S3($key, $disk);
     }
 }

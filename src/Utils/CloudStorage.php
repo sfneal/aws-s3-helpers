@@ -6,15 +6,10 @@ use DateTimeInterface;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Support\Facades\Storage;
-use Sfneal\Helpers\Aws\S3\Interfaces\S3Accessors;
-use Sfneal\Helpers\Aws\S3\Utils\Traits\LocalFileDeletion;
-use Sfneal\Helpers\Aws\S3\Utils\Traits\UploadStreaming;
+use Sfneal\Helpers\Aws\S3\Utils\Interfaces\S3Accessors;
 
 class CloudStorage implements S3Accessors
 {
-    use LocalFileDeletion;
-    use UploadStreaming;
-
     /**
      * @var string AWS S3 file key
      */
@@ -29,11 +24,12 @@ class CloudStorage implements S3Accessors
      * S3 constructor.
      *
      * @param string $s3Key
+     * @param string|null $disk
      */
-    public function __construct(string $s3Key)
+    public function __construct(string $s3Key, string $disk = null)
     {
         $this->s3Key = $s3Key;
-        $this->disk = config('filesystem.cloud', 's3');
+        $this->disk = $disk ?? config('filesystem.cloud', 's3');
     }
 
     /**
@@ -44,19 +40,6 @@ class CloudStorage implements S3Accessors
     public function getKey(): string
     {
         return $this->s3Key;
-    }
-
-    /**
-     * Set the filesystem disk.
-     *
-     * @param string $disk
-     * @return $this
-     */
-    public function setDisk(string $disk): self
-    {
-        $this->disk = $disk;
-
-        return $this;
     }
 
     /**

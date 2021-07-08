@@ -1,6 +1,6 @@
 <?php
 
-namespace Sfneal\Helpers\Aws\S3\Interfaces;
+namespace Sfneal\Helpers\Aws\S3\Utils\Interfaces;
 
 use DateTimeInterface;
 
@@ -12,14 +12,6 @@ interface S3Accessors
      * @return string
      */
     public function getKey(): string;
-
-    /**
-     * Set the filesystem disk.
-     *
-     * @param string $disk
-     * @return $this
-     */
-    public function setDisk(string $disk): self;
 
     /**
      * Return an S3 file url.

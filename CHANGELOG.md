@@ -142,3 +142,9 @@ All notable changes to `aws-s3-helpers` will be documented in this file
 - refactor interfaces so that 'accessors' & 'actions' are implemented separately
 - make test classes for testing interfaces
 - add sfneal/mock-models to composer requirements to support use of the new `InterfaceTest` trait
+
+
+## 1.0.0 - 2021-07-08
+- initial production release
+- refactor `CloudStorage` so that $disk is now a constructor param instead of requiring a call to a setter method
+- refactor interfaces from `Sfneal\Helpers\Aws\S3\Interfaces` to `Sfneal\Helpers\Aws\S3\Utils\Interfaces` namespace

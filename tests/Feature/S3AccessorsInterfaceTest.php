@@ -2,9 +2,9 @@
 
 namespace Sfneal\Helpers\Aws\S3\Tests\Feature;
 
-use Sfneal\Helpers\Aws\S3\Interfaces\S3Accessors;
 use Sfneal\Helpers\Aws\S3\Tests\TestCase;
 use Sfneal\Helpers\Aws\S3\Utils\CloudStorage;
+use Sfneal\Helpers\Aws\S3\Utils\Interfaces\S3Accessors;
 use Sfneal\Testing\Utils\Traits\InterfaceTest;
 
 class S3AccessorsInterfaceTest extends TestCase
@@ -42,7 +42,6 @@ class S3AccessorsInterfaceTest extends TestCase
     {
         return [
             'getKey',
-            'setDisk',
             'url',
             'urlTemp',
         ];

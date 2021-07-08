@@ -16,6 +16,22 @@ You can install the package via composer:
 composer require sfneal/aws-s3-helpers
 ```
 
+In order to autoload to the helper functions add the following path to the autoload.files section in your composer.json.
+
+```json
+"autoload": {
+    "files": [
+      "vendor/sfneal/aws-s3-helpers/src/Helpers/s3-helpers.php"
+    ]
+},
+```
+
+To modify the s3-helpers settings publish the ServiceProvider & modify the config.
+
+``` php
+php artisan vendor:publish --provider="Sfneal\Helpers\Aws\S3\Providers\S3HelpersServiceProvider"
+```
+
 ## Usage
 Add 's3' disk to the 'disks' array in config/filesystems.php with your own AWS credentials.
 

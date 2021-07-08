@@ -2,8 +2,8 @@
 
 namespace Sfneal\Helpers\Aws\S3\Tests\Feature;
 
-use Sfneal\Helpers\Aws\S3\Interfaces\S3Actions;
 use Sfneal\Helpers\Aws\S3\Tests\TestCase;
+use Sfneal\Helpers\Aws\S3\Utils\Interfaces\S3Actions;
 use Sfneal\Helpers\Aws\S3\Utils\S3;
 use Sfneal\Testing\Utils\Traits\InterfaceTest;
 
