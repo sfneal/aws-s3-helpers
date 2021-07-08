@@ -6,7 +6,7 @@ use DateTimeInterface;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Support\Facades\Storage;
-use Sfneal\Helpers\Aws\S3\Interfaces\S3Accessors;
+use Sfneal\Helpers\Aws\S3\Utils\Interfaces\S3Accessors;
 
 class CloudStorage implements S3Accessors
 {

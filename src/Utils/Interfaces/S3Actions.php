@@ -1,6 +1,6 @@
 <?php
 
-namespace Sfneal\Helpers\Aws\S3\Interfaces;
+namespace Sfneal\Helpers\Aws\S3\Utils\Interfaces;
 
 use Closure;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;

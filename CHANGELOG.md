@@ -146,3 +146,4 @@ All notable changes to `aws-s3-helpers` will be documented in this file
 
 ## 0.13.2 - 2021-07-08
 - refactor `CloudStorage` so that $disk is now a constructor param instead of requiring a call to a setter method
+- refactor interfaces from `Sfneal\Helpers\Aws\S3\Interfaces` to `Sfneal\Helpers\Aws\S3\Utils\Interfaces` namespace

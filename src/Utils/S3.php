@@ -7,7 +7,7 @@ use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\File;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Response;
-use Sfneal\Helpers\Aws\S3\Interfaces\S3Actions;
+use Sfneal\Helpers\Aws\S3\Utils\Interfaces\S3Actions;
 use Sfneal\Helpers\Aws\S3\Utils\Traits\LocalFileDeletion;
 use Sfneal\Helpers\Aws\S3\Utils\Traits\UploadStreaming;
 
