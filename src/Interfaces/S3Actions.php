@@ -3,28 +3,12 @@
 namespace Sfneal\Helpers\Aws\S3\Interfaces;
 
 use Closure;
-use DateTimeInterface;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
 
-interface S3Filesystem
+interface S3Actions
 {
-    /**
-     * Return an S3 file url.
-     *
-     * @return string
-     */
-    public function url(): string;
-
-    /**
-     * Return a temporary S3 file url.
-     *
-     * @param DateTimeInterface|null $expiration
-     * @return string
-     */
-    public function urlTemp(DateTimeInterface $expiration = null): string;
-
     /**
      * Upload a file to S3 using automatic streaming.
      *

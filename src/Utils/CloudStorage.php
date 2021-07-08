@@ -2,13 +2,15 @@
 
 namespace Sfneal\Helpers\Aws\S3\Utils;
 
+use DateTimeInterface;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Support\Facades\Storage;
+use Sfneal\Helpers\Aws\S3\Interfaces\S3Accessors;
 use Sfneal\Helpers\Aws\S3\Utils\Traits\LocalFileDeletion;
 use Sfneal\Helpers\Aws\S3\Utils\Traits\UploadStreaming;
 
-class CloudStorage
+class CloudStorage implements S3Accessors
 {
     use LocalFileDeletion;
     use UploadStreaming;
@@ -55,6 +57,30 @@ class CloudStorage
         $this->disk = $disk;
 
         return $this;
+    }
+
+    /**
+     * Return either an S3 file url.
+     *
+     * @return string
+     */
+    public function url(): string
+    {
+        return $this->storageDisk()->url($this->s3Key);
+    }
+
+    /**
+     * Return either a temporary S3 file url.
+     *
+     * @param DateTimeInterface|null $expiration
+     * @return string
+     */
+    public function urlTemp(DateTimeInterface $expiration = null): string
+    {
+        return $this->storageDisk()->temporaryUrl(
+            $this->s3Key,
+            $expiration ?? config('s3-helpers.expiration')
+        );
     }
 
     /**

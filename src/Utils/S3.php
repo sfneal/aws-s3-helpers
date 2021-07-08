@@ -3,39 +3,14 @@
 namespace Sfneal\Helpers\Aws\S3\Utils;
 
 use Closure;
-use DateTimeInterface;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\File;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Response;
-use Sfneal\Helpers\Aws\S3\Interfaces\S3Filesystem;
+use Sfneal\Helpers\Aws\S3\Interfaces\S3Actions;
 
-class S3 extends CloudStorage implements S3Filesystem
+class S3 extends CloudStorage implements S3Actions
 {
-    /**
-     * Return either an S3 file url.
-     *
-     * @return string
-     */
-    public function url(): string
-    {
-        return $this->storageDisk()->url($this->s3Key);
-    }
-
-    /**
-     * Return either a temporary S3 file url.
-     *
-     * @param DateTimeInterface|null $expiration
-     * @return string
-     */
-    public function urlTemp(DateTimeInterface $expiration = null): string
-    {
-        return $this->storageDisk()->temporaryUrl(
-            $this->s3Key,
-            $expiration ?? config('s3-helpers.expiration')
-        );
-    }
-
     /**
      * Upload a file to S3 using automatic streaming or raw file uploading.
      *

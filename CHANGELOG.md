@@ -136,3 +136,9 @@ All notable changes to `aws-s3-helpers` will be documented in this file
 - add ability to delete a local file after it's been uploaded
 - fix issues with `UploadTest::executeAssertions()` method not comparing local & cloud files
 - add test methods to `UploadTest` for testing deleting local files (w/streaming enabled & disabled)
+
+
+## 0.13.1 - 2021-07-08
+- refactor interfaces so that 'accessors' & 'actions' are implemented separately
+- make test classes for testing interfaces
+- add sfneal/mock-models to composer requirements to support use of the new `InterfaceTest` trait
