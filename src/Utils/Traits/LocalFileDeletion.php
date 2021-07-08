@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Sfneal\Helpers\Aws\S3\Utils\Traits;
-
 
 trait LocalFileDeletion
 {
