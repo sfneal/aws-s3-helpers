@@ -29,7 +29,7 @@ class S3AccessorsInterfaceTest extends TestCase
     public function classes(): array
     {
         return [
-            CloudStorage::class
+            CloudStorage::class,
         ];
     }
 
