@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
+use Sfneal\Helpers\Aws\S3\Utils\CloudStorage;
 
 interface S3Actions
 {
@@ -14,18 +15,18 @@ interface S3Actions
      *
      * @param string $localFilePath
      * @param string|null $acl
-     * @return self
+     * @return CloudStorage
      */
-    public function upload(string $localFilePath, string $acl = null): self;
+    public function upload(string $localFilePath, string $acl = null): CloudStorage;
 
     /**
      * Upload raw file contents to AWS S3.
      *
      * @param $fileContents
      * @param string|null $acl
-     * @return self
+     * @return CloudStorage
      */
-    public function uploadRaw($fileContents, string $acl = null): self;
+    public function uploadRaw($fileContents, string $acl = null): CloudStorage;
 
     /**
      * Download a file from AWS S3.

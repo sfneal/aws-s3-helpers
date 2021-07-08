@@ -5,6 +5,7 @@ namespace Sfneal\Helpers\Aws\S3\Tests\Unit;
 use Illuminate\Support\Facades\Storage;
 use Sfneal\Helpers\Aws\S3\StorageS3;
 use Sfneal\Helpers\Aws\S3\Tests\StorageS3TestCase;
+use Sfneal\Helpers\Aws\S3\Utils\CloudStorage;
 
 class UploadTest extends StorageS3TestCase
 {
@@ -28,12 +29,14 @@ class UploadTest extends StorageS3TestCase
      * Execute upload test assertions.
      *
      * @param $file
-     * @param $s3Key
+     * @param $storage
      */
-    protected function executeAssertions($file, $s3Key)
+    protected function executeAssertions($file, $storage)
     {
+        $s3Key = $storage->getKey();
         $exists = Storage::disk(config('filesystem.cloud', 's3'))->exists($s3Key);
 
+        $this->assertInstanceOf(CloudStorage::class, $storage);
         $this->assertIsBool($exists);
         $this->assertTrue($exists, "The file '{$file}' doesn't exist.");
         $this->assertEquals(
@@ -50,12 +53,11 @@ class UploadTest extends StorageS3TestCase
     public function file_can_be_uploaded(string $file)
     {
         $this->uploadPath = "uploaded_{$file}";
-        $s3Key = StorageS3::key($this->uploadPath)
+        $storage = StorageS3::key($this->uploadPath)
             ->disableStreaming()
-            ->upload(__DIR__.'/../Assets/'.$file)
-            ->getKey();
+            ->upload(__DIR__.'/../Assets/'.$file);
 
-        $this->executeAssertions($file, $s3Key);
+        $this->executeAssertions($file, $storage);
     }
 
     /**
@@ -66,12 +68,11 @@ class UploadTest extends StorageS3TestCase
     public function file_can_be_uploaded_streamed(string $file)
     {
         $this->uploadPath = "uploaded_{$file}";
-        $s3Key = StorageS3::key($this->uploadPath)
+        $storage = StorageS3::key($this->uploadPath)
             ->enableStreaming()
-            ->upload(__DIR__.'/../Assets/'.$file)
-            ->getKey();
+            ->upload(__DIR__.'/../Assets/'.$file);
 
-        $this->executeAssertions($file, $s3Key);
+        $this->executeAssertions($file, $storage);
     }
 
     /**
@@ -82,11 +83,10 @@ class UploadTest extends StorageS3TestCase
     public function file_can_be_uploaded_raw(string $file)
     {
         $this->uploadPath = "uploaded_{$file}";
-        $s3Key = StorageS3::key($this->uploadPath)
-            ->uploadRaw(file_get_contents(__DIR__.'/../Assets/'.$file))
-            ->getKey();
+        $storage = StorageS3::key($this->uploadPath)
+            ->uploadRaw(file_get_contents(__DIR__.'/../Assets/'.$file));
 
-        $this->executeAssertions($file, $s3Key);
+        $this->executeAssertions($file, $storage);
     }
 
     /**
@@ -103,13 +103,12 @@ class UploadTest extends StorageS3TestCase
         $this->uploadPath = "uploaded_{$tempFile}";
         $this->assertTrue(file_exists($localPath));
 
-        $s3Key = StorageS3::key($this->uploadPath)
+        $storage = StorageS3::key($this->uploadPath)
             ->disableStreaming()
             ->deleteLocalFileAfterUpload()
-            ->upload($localPath)
-            ->getKey();
+            ->upload($localPath);
 
-        $this->executeAssertions($file, $s3Key);
+        $this->executeAssertions($file, $storage);
         $this->assertFalse(file_exists($localPath));
     }
 
@@ -127,13 +126,12 @@ class UploadTest extends StorageS3TestCase
         $this->uploadPath = "uploaded_{$tempFile}";
         $this->assertTrue(file_exists($localPath));
 
-        $s3Key = StorageS3::key($this->uploadPath)
+        $storage = StorageS3::key($this->uploadPath)
             ->enableStreaming()
             ->deleteLocalFileAfterUpload()
-            ->upload($localPath)
-            ->getKey();
+            ->upload($localPath);
 
-        $this->executeAssertions($file, $s3Key);
+        $this->executeAssertions($file, $storage);
         $this->assertFalse(file_exists($localPath));
     }
 }

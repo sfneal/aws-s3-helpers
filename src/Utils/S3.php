@@ -21,24 +21,24 @@ class S3 extends CloudStorage implements S3Actions
      *
      * @param string $localFilePath
      * @param string|null $acl
-     * @return self
+     * @return CloudStorage
      */
-    public function upload(string $localFilePath, string $acl = null): self
+    public function upload(string $localFilePath, string $acl = null): CloudStorage
     {
         // Use streaming for improved performance if enabled
         if ($this->isStreamingEnabled()) {
-            $this->uploadStream($localFilePath, $acl);
+            $cloudStorage = $this->uploadStream($localFilePath, $acl);
         }
 
         // Use standard file uploading
         else {
-            $this->uploadRaw(fopen($localFilePath, 'r+'), $acl);
+            $cloudStorage = $this->uploadRaw(fopen($localFilePath, 'r+'), $acl);
         }
 
         // Conditionally delete the local file
         $this->deleteLocalFileIfEnabled($localFilePath);
 
-        return $this;
+        return $cloudStorage;
     }
 
     /**
@@ -46,13 +46,13 @@ class S3 extends CloudStorage implements S3Actions
      *
      * @param $fileContents
      * @param string|null $acl
-     * @return self
+     * @return CloudStorage
      */
-    public function uploadRaw($fileContents, string $acl = null): self
+    public function uploadRaw($fileContents, string $acl = null): CloudStorage
     {
         $this->storageDisk()->put($this->s3Key, $fileContents, $acl);
 
-        return $this;
+        return (new CloudStorage($this->s3Key))->setDisk($this->disk);
     }
 
     /**
@@ -60,9 +60,9 @@ class S3 extends CloudStorage implements S3Actions
      *
      * @param string $localFilePath
      * @param string|null $acl
-     * @return $this
+     * @return CloudStorage
      */
-    protected function uploadStream(string $localFilePath, string $acl = null): self
+    protected function uploadStream(string $localFilePath, string $acl = null): CloudStorage
     {
         // Upload the file
         $this->storageDisk()->putFileAs(
@@ -72,7 +72,7 @@ class S3 extends CloudStorage implements S3Actions
             $acl
         );
 
-        return $this;
+        return (new CloudStorage($this->s3Key))->setDisk($this->disk);
     }
 
     /**
