@@ -29,7 +29,7 @@ class S3ActionsInterfaceTest extends TestCase
     public function classes(): array
     {
         return [
-            S3::class
+            S3::class,
         ];
     }
 
