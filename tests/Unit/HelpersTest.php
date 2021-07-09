@@ -2,7 +2,7 @@
 
 namespace Sfneal\Helpers\Aws\S3\Tests\Unit;
 
-use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Http;
 use Sfneal\Helpers\Aws\S3\StorageS3;
 use Sfneal\Helpers\Aws\S3\Tests\StorageS3TestCase;
 
@@ -14,10 +14,10 @@ class HelpersTest extends StorageS3TestCase
         $this->assertIsString($url);
         $this->assertStringContainsString($file, $url);
 
-        $response = (new Client())->request('get', $url);
+        $response = Http::get($url);
 
-        $this->assertEquals(200, $response->getStatusCode());
-        $this->assertEquals(file_get_contents($url), $response->getBody()->getContents());
+        $this->assertTrue($response->ok());
+        $this->assertEquals(file_get_contents($url), $response->body());
     }
 
     /**
