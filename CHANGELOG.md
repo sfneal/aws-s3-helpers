@@ -148,3 +148,7 @@ All notable changes to `aws-s3-helpers` will be documented in this file
 - initial production release
 - refactor `CloudStorage` so that $disk is now a constructor param instead of requiring a call to a setter method
 - refactor interfaces from `Sfneal\Helpers\Aws\S3\Interfaces` to `Sfneal\Helpers\Aws\S3\Utils\Interfaces` namespace
+
+
+## 1.0.1 - 2021-07-09
+- refactor test suite to use `Http` facade instead of `GuzzleHttp\Client` for testing responses
